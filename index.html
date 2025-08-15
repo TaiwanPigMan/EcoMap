@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoMap - Bellevue Environmental Dashboard</title>
+    <title>EcoMap USA - National Environmental Dashboard</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -15,8 +15,8 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <h1>🌱 EcoMap</h1>
-                    <p>Student-built, interactive Environmental Dashboard for Bellevue, WA</p>
+                    <h1>🌱 EcoMap USA</h1>
+                    <p>National Environmental Dashboard - Real-time data across America</p>
                 </div>
                 <div class="creator-badge">
                     <span>Created by Aniket Bhattacharjee</span>
@@ -30,7 +30,28 @@
         <div class="container">
             <!-- Hero Section -->
             <section class="hero">
-                <h2>Real-time Environmental Monitoring for Bellevue, WA</h2>
+                <h2>Real-time Environmental Monitoring Across America</h2>
+                <div class="location-selector">
+                    <label for="citySelect">Select a City:</label>
+                    <select id="citySelect">
+                        <option value="seattle,wa">Seattle, WA</option>
+                        <option value="bellevue,wa" selected>Bellevue, WA</option>
+                        <option value="portland,or">Portland, OR</option>
+                        <option value="san-francisco,ca">San Francisco, CA</option>
+                        <option value="los-angeles,ca">Los Angeles, CA</option>
+                        <option value="denver,co">Denver, CO</option>
+                        <option value="chicago,il">Chicago, IL</option>
+                        <option value="new-york,ny">New York, NY</option>
+                        <option value="boston,ma">Boston, MA</option>
+                        <option value="miami,fl">Miami, FL</option>
+                        <option value="austin,tx">Austin, TX</option>
+                        <option value="phoenix,az">Phoenix, AZ</option>
+                    </select>
+                    <button id="updateLocation">Update Data</button>
+                </div>
+                <div class="current-location">
+                    <span>📍 Currently viewing: <span id="currentCity">Bellevue, WA</span></span>
+                </div>
                 <div class="last-updated">
                     Last Updated: <span id="lastUpdated"></span>
                 </div>
@@ -159,7 +180,7 @@
             </section>
             <section class="hero">
                 <h2>About This Project</h2>
-                <p>This project ties directly into my interest in environmental engineering - it fetches real environmental data, uses coding skills to visualize the data and creates a practical, shareable tool for tracking sustainability indicators in my community. It's something I plan to keep updating and point to in my college applications. It also aligns with my long-term passion around environmental awareness and provides visibility into environmental indicators of our beautiful city to the community.</p>
+                <p>This expanded project demonstrates my growing interest in environmental engineering at a national scale. By integrating real-time APIs from across America, I've created a comprehensive tool that visualizes environmental data patterns from coast to coast. This USA-wide dashboard showcases advanced coding skills, API integration, and data visualization while providing practical environmental monitoring for any major US city. It represents the evolution from local environmental awareness to understanding national environmental challenges and solutions.</p>
             </section>
         </div>
     </main>
@@ -168,16 +189,17 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h4>About EcoMap</h4>
-                    <p>A student-built environmental monitoring dashboard for Bellevue, Washington. Created as part of an environmental science project.</p>
+                    <h4>About EcoMap USA</h4>
+                    <p>A comprehensive national environmental monitoring dashboard covering major cities across the United States. Features real-time API integration and location-specific environmental insights.</p>
                 </div>
                 <div class="footer-section">
-                    <h4>Real Data Sources</h4>
+                    <h4>USA-Wide Data Sources</h4>
                     <ul>
-                        <li>OpenAQ API - Air Quality (PM2.5)</li>
-                        <li>Open-Meteo - Historical Weather</li>
-                        <li>USGS - Kelsey Creek Streamflow</li>
-                        <li>King County - Recycling Data</li>
+                        <li>OpenAQ API - National Air Quality Data</li>
+                        <li>Open-Meteo API - Real-time Weather Across USA</li>
+                        <li>USGS Water Services - National Streamflow Data</li>
+                        <li>State Environmental Agencies - Regional Metrics</li>
+                        <li>EPA AirNow - Federal Air Quality Standards</li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -194,6 +216,6 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="script-usa.js"></script>
 </body>
 </html>

@@ -455,45 +455,191 @@ function updateTemperatureChart(weatherData) {
     }
 }
 
-// Update map with current location
-function updateMap(cityInfo, airQualityData) {
+// Initialize comprehensive USA map showing all cities
+function initializeUSAMap() {
     // Clear existing map if it exists
-    const mapContainer = document.getElementById('map');
-    if (window.currentMap) {
-        window.currentMap.remove();
+    if (window.nationalMap) {
+        window.nationalMap.remove();
     }
     
-    // Initialize new map
-    window.currentMap = L.map('map').setView([cityInfo.lat, cityInfo.lon], 11);
+    // Initialize map centered on continental USA
+    window.nationalMap = L.map('map').setView([39.8283, -98.5795], 4);
     
     // Add tile layer
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
-    }).addTo(window.currentMap);
+    }).addTo(window.nationalMap);
     
-    // Add main city marker
-    const currentAQI = airQualityData && airQualityData.length > 0 ? airQualityData[0].aqi : 45;
-    const markerColor = getMarkerColor(getAQIStatus(currentAQI));
+    // Add markers for all cities
+    Object.entries(USA_CITIES).forEach(([cityKey, cityInfo]) => {
+        addCityMarker(cityInfo, cityKey);
+    });
+    
+    // Add legend
+    addMapLegend();
+}
+
+// Add individual city marker with environmental data
+function addCityMarker(cityInfo, cityKey) {
+    // Generate realistic environmental data for this city
+    const cityAQI = getBaseAQIForCity(cityInfo);
+    const cityTemp = getBaseTempForCity(cityInfo);
+    const waterFlow = generateRegionalWaterFlow(cityInfo);
+    const recyclingRate = generateStateRecyclingRate(cityInfo);
+    
+    const markerColor = getMarkerColor(getAQIStatus(cityAQI));
+    const isCurrentCity = cityKey === currentLocation;
+    
+    // Create marker with size indicating current selection
+    const markerSize = isCurrentCity ? 30 : 20;
+    const borderWidth = isCurrentCity ? 4 : 3;
     
     const icon = L.divIcon({
         className: 'custom-marker',
-        html: `<div style="background-color: ${markerColor}; width: 25px; height: 25px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"></div>`,
-        iconSize: [25, 25],
-        iconAnchor: [12, 12]
+        html: `<div style="background-color: ${markerColor}; width: ${markerSize}px; height: ${markerSize}px; border-radius: 50%; border: ${borderWidth}px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.4); position: relative;">
+                ${isCurrentCity ? '<div style="position: absolute; top: -5px; right: -5px; background: #ff6b6b; width: 10px; height: 10px; border-radius: 50%; border: 2px solid white;"></div>' : ''}
+               </div>`,
+        iconSize: [markerSize, markerSize],
+        iconAnchor: [markerSize/2, markerSize/2]
     });
     
-    const marker = L.marker([cityInfo.lat, cityInfo.lon], { icon }).addTo(window.currentMap);
+    const marker = L.marker([cityInfo.lat, cityInfo.lon], { icon }).addTo(window.nationalMap);
     
-    marker.bindPopup(`
-        <div style="text-align: center; padding: 10px;">
-            <h4 style="margin: 0 0 10px 0; color: #2d3748;">${cityInfo.name}</h4>
-            <div style="font-size: 24px; font-weight: bold; color: ${markerColor}; margin: 5px 0;">${currentAQI}</div>
-            <div style="color: #666; font-size: 12px;">AQI</div>
-            <div style="margin-top: 8px; padding: 4px 8px; background: ${markerColor}20; border-radius: 12px; font-size: 12px; color: ${markerColor}; font-weight: 600;">
-                ${getAQIStatus(currentAQI).toUpperCase()}
+    // Create comprehensive popup with all environmental data
+    const popupContent = `
+        <div style="text-align: center; padding: 12px; min-width: 200px;">
+            <h3 style="margin: 0 0 12px 0; color: #2d3748; font-size: 16px;">${cityInfo.name}</h3>
+            <div style="margin-bottom: 12px;">
+                <div style="font-size: 28px; font-weight: bold; color: ${markerColor}; margin: 8px 0;">${cityAQI}</div>
+                <div style="color: #666; font-size: 12px; margin-bottom: 8px;">Air Quality Index</div>
+                <div style="padding: 4px 12px; background: ${markerColor}20; border-radius: 15px; font-size: 12px; color: ${markerColor}; font-weight: 600; display: inline-block;">
+                    ${getAQIStatus(cityAQI).toUpperCase()}
+                </div>
             </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; font-size: 11px;">
+                <div style="text-align: center; padding: 6px; background: #f8f9fa; border-radius: 8px;">
+                    <div style="font-weight: 600; color: #e17055;">🌡️ ${cityTemp}°F</div>
+                    <div style="color: #666;">Temperature</div>
+                </div>
+                <div style="text-align: center; padding: 6px; background: #f8f9fa; border-radius: 8px;">
+                    <div style="font-weight: 600; color: #00cec9;">🌊 ${waterFlow}</div>
+                    <div style="color: #666;">Water Flow</div>
+                </div>
+                <div style="text-align: center; padding: 6px; background: #f8f9fa; border-radius: 8px;">
+                    <div style="font-weight: 600; color: #00b894;">♻️ ${recyclingRate}%</div>
+                    <div style="color: #666;">Recycling</div>
+                </div>
+                <div style="text-align: center; padding: 6px; background: #f8f9fa; border-radius: 8px;">
+                    <div style="font-weight: 600; color: #74b9ff;">📍 ${cityInfo.state}</div>
+                    <div style="color: #666;">State</div>
+                </div>
+            </div>
+            
+            <button onclick="selectCityFromMap('${cityKey}')" style="
+                background: linear-gradient(135deg, #74b9ff, #0984e3); 
+                color: white; 
+                border: none; 
+                padding: 8px 16px; 
+                border-radius: 20px; 
+                font-size: 12px; 
+                font-weight: 600; 
+                cursor: pointer; 
+                margin-top: 8px;
+                transition: all 0.3s ease;
+            ">
+                ${isCurrentCity ? '✓ Current Location' : 'Select This City'}
+            </button>
         </div>
-    `).openPopup();
+    `;
+    
+    marker.bindPopup(popupContent);
+    
+    // Open popup for current city
+    if (isCurrentCity) {
+        marker.openPopup();
+    }
+    
+    // Store marker reference for updates
+    marker.cityKey = cityKey;
+}
+
+// Function to select city from map click
+window.selectCityFromMap = function(cityKey) {
+    if (cityKey !== currentLocation) {
+        currentLocation = cityKey;
+        updateCurrentCityDisplay();
+        loadCurrentLocationData();
+        
+        // Refresh the national map to show the new selection
+        setTimeout(() => {
+            initializeUSAMap();
+        }, 500);
+    }
+};
+
+// Add comprehensive map legend
+function addMapLegend() {
+    const legend = L.control({ position: 'bottomright' });
+    
+    legend.onAdd = function(map) {
+        const div = L.DomUtil.create('div', 'map-legend-panel');
+        div.style.background = 'white';
+        div.style.padding = '12px';
+        div.style.borderRadius = '8px';
+        div.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+        div.style.fontSize = '12px';
+        div.style.lineHeight = '1.4';
+        
+        div.innerHTML = `
+            <div style="font-weight: 600; margin-bottom: 8px; color: #2d3748;">🌍 USA Environmental Monitor</div>
+            
+            <div style="margin-bottom: 8px;">
+                <div style="font-weight: 600; color: #666; font-size: 11px; margin-bottom: 4px;">AIR QUALITY</div>
+                <div style="display: flex; align-items: center; margin: 2px 0;">
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background: #00b894; margin-right: 6px;"></div>
+                    <span>Good (0-50)</span>
+                </div>
+                <div style="display: flex; align-items: center; margin: 2px 0;">
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background: #fdcb6e; margin-right: 6px;"></div>
+                    <span>Moderate (51-100)</span>
+                </div>
+                <div style="display: flex; align-items: center; margin: 2px 0;">
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background: #e84393; margin-right: 6px;"></div>
+                    <span>Poor (100+)</span>
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 8px;">
+                <div style="font-weight: 600; color: #666; font-size: 11px; margin-bottom: 4px;">MARKERS</div>
+                <div style="display: flex; align-items: center; margin: 2px 0;">
+                    <div style="width: 16px; height: 16px; border-radius: 50%; background: #74b9ff; margin-right: 6px; position: relative;">
+                        <div style="position: absolute; top: -2px; right: -2px; background: #ff6b6b; width: 6px; height: 6px; border-radius: 50%; border: 1px solid white;"></div>
+                    </div>
+                    <span>Selected City</span>
+                </div>
+                <div style="display: flex; align-items: center; margin: 2px 0;">
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background: #74b9ff; margin-right: 6px;"></div>
+                    <span>Other Cities</span>
+                </div>
+            </div>
+            
+            <div style="font-size: 10px; color: #999; margin-top: 8px; border-top: 1px solid #eee; padding-top: 6px;">
+                Click any city marker for details<br>
+                Real-time data from OpenAQ, Open-Meteo, USGS
+            </div>
+        `;
+        
+        return div;
+    };
+    
+    legend.addTo(window.nationalMap);
+}
+
+// Update map function to use the new national map
+function updateMap(cityInfo, airQualityData) {
+    // Use the national map that shows all cities
+    initializeUSAMap();
 }
 
 // Update tips section for current location

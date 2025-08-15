@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoMap - Bellevue Environmental Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>🌱 EcoMap</h1>
+                    <p>Student-built, interactive Environmental Dashboard for Bellevue, WA</p>
+                </div>
+                <div class="creator-badge">
+                    <span>Created by Aniket Bhattacharjee</span>
+                    <div class="contact">aniket_b@hotmail.com</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Hero Section -->
+            <section class="hero">
+                <h2>Real-time Environmental Monitoring for Bellevue, WA</h2>
+                <div class="last-updated">
+                    Last Updated: <span id="lastUpdated"></span>
+                </div>
+            </section>
+
+            <!-- Key Metrics Grid -->
+            <section class="metrics-grid">
+                <div class="metric-card air-quality">
+                    <div class="metric-header">
+                        <h3>Air Quality Index</h3>
+                        <span class="status good">Good</span>
+                    </div>
+                    <div class="metric-value">
+                        <span class="number" id="aqiValue">42</span>
+                        <span class="unit">AQI</span>
+                    </div>
+                    <div class="metric-description">PM2.5: 8.2 μg/m³</div>
+                </div>
+
+                <div class="metric-card temperature">
+                    <div class="metric-header">
+                        <h3>Temperature</h3>
+                        <span class="icon">🌡️</span>
+                    </div>
+                    <div class="metric-value">
+                        <span class="number" id="tempValue">68</span>
+                        <span class="unit">°F</span>
+                    </div>
+                    <div class="metric-description">Feels like 71°F</div>
+                </div>
+
+                <div class="metric-card humidity">
+                    <div class="metric-header">
+                        <h3>Humidity</h3>
+                        <span class="icon">💧</span>
+                    </div>
+                    <div class="metric-value">
+                        <span class="number" id="humidityValue">65</span>
+                        <span class="unit">%</span>
+                    </div>
+                    <div class="metric-description">Moderate levels</div>
+                </div>
+
+                <div class="metric-card streamflow">
+                    <div class="metric-header">
+                        <h3>Kelsey Creek Flow</h3>
+                        <span class="icon">🌊</span>
+                    </div>
+                    <div class="metric-value">
+                        <span class="number" id="streamflowValue">15.2</span>
+                        <span class="unit">cfs</span>
+                    </div>
+                    <div class="metric-description">USGS Gauge 12119990</div>
+                </div>
+
+                <div class="metric-card recycling">
+                    <div class="metric-header">
+                        <h3>Recycling Rate</h3>
+                        <span class="icon">♻️</span>
+                    </div>
+                    <div class="metric-value">
+                        <span class="number" id="recyclingValue">68</span>
+                        <span class="unit">%</span>
+                    </div>
+                    <div class="metric-description">King County diversion</div>
+                </div>
+            </section>
+
+            <!-- Charts Section -->
+            <section class="charts-section">
+                <div class="chart-container">
+                    <h3>24-Hour Air Quality Trend</h3>
+                    <canvas id="aqiChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Weekly Temperature Range</h3>
+                    <canvas id="tempChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Map Section -->
+            <section class="map-section">
+                <h3>Environmental Monitoring Stations</h3>
+                <div id="map"></div>
+                <div class="map-legend">
+                    <div class="legend-item">
+                        <span class="legend-color good"></span>
+                        <span>Good Air Quality</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color moderate"></span>
+                        <span>Moderate Air Quality</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color poor"></span>
+                        <span>Poor Air Quality</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Environmental Tips -->
+            <section class="tips-section">
+                <h3>Environmental Tips for Bellevue Residents</h3>
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <div class="tip-icon">🚴</div>
+                        <h4>Use Alternative Transport</h4>
+                        <p>Bike or use public transit to reduce emissions. Bellevue has excellent bike trails!</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">♻️</div>
+                        <h4>Recycle Properly</h4>
+                        <p>Follow Bellevue's recycling guidelines to minimize waste in our community.</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">🌳</div>
+                        <h4>Plant Native Species</h4>
+                        <p>Support local ecosystems by planting Pacific Northwest native plants.</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">💡</div>
+                        <h4>Energy Conservation</h4>
+                        <p>Use LED bulbs and energy-efficient appliances to reduce your carbon footprint.</p>
+                    </div>
+                </div>
+            </section>
+            <section class="hero">
+                <h2>About This Project</h2>
+                <p>This project ties directly into my interest in environmental engineering - it fetches real environmental data, uses coding skills to visualize the data and creates a practical, shareable tool for tracking sustainability indicators in my community. It's something I plan to keep updating and point to in my college applications. It also aligns with my long-term passion around environmental awareness and provides visibility into environmental indicators of our beautiful city to the community.</p>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>About EcoMap</h4>
+                    <p>A student-built environmental monitoring dashboard for Bellevue, Washington. Created as part of an environmental science project.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Real Data Sources</h4>
+                    <ul>
+                        <li>OpenAQ API - Air Quality (PM2.5)</li>
+                        <li>Open-Meteo - Historical Weather</li>
+                        <li>USGS - Kelsey Creek Streamflow</li>
+                        <li>King County - Recycling Data</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>Aniket Bhattacharjee<br>
+                    Environmental Science Program<br>
+                    Bellevue High School<br>
+                    Student Research Project</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 EcoMap Project | Student Environmental Initiative</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

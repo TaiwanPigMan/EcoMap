@@ -18,6 +18,7 @@ const USA_CITIES = {
     'los-angeles,ca': { name: 'Los Angeles, CA', lat: 34.0522, lon: -118.2437, state: 'California' },
     'denver,co': { name: 'Denver, CO', lat: 39.7392, lon: -104.9903, state: 'Colorado' },
     'chicago,il': { name: 'Chicago, IL', lat: 41.8781, lon: -87.6298, state: 'Illinois' },
+    'detroit,mi': { name: 'Detroit, MI', lat: 42.3314, lon: -83.0458, state: 'Michigan' },
     'new-york,ny': { name: 'New York, NY', lat: 40.7128, lon: -74.0060, state: 'New York' },
     'boston,ma': { name: 'Boston, MA', lat: 42.3601, lon: -71.0589, state: 'Massachusetts' },
     'miami,fl': { name: 'Miami, FL', lat: 25.7617, lon: -80.1918, state: 'Florida' },
@@ -252,6 +253,9 @@ function updateCurrentMetrics(airQualityData, weatherData) {
             `Current humidity level`;
     }
     
+    // Update weather prediction section
+    updateWeatherPrediction(weatherData);
+    
     // Update location-specific metrics
     updateLocationSpecificMetrics();
 }
@@ -283,6 +287,7 @@ function generateRegionalWaterFlow(cityInfo) {
         'California': 15.8,
         'Colorado': 45.3,
         'Illinois': 18.7,
+        'Michigan': 32.1,
         'New York': 22.4,
         'Massachusetts': 19.6,
         'Florida': 12.3,
@@ -306,6 +311,7 @@ function generateStateRecyclingRate(cityInfo) {
         'California': 75,
         'Colorado': 65,
         'Illinois': 58,
+        'Michigan': 64,
         'New York': 62,
         'Massachusetts': 71,
         'Florida': 54,
@@ -688,6 +694,12 @@ function getRegionalTips(state) {
             { title: 'Wind Energy', description: 'Support renewable energy initiatives in this wind-rich state.' },
             { title: 'Native Landscaping', description: 'Use drought-tolerant Texas natives like Bluebonnets and Live Oak.' }
         ],
+        'Michigan': [
+            { title: 'Great Lakes Conservation', description: 'Protect freshwater resources by preventing runoff and using eco-friendly lawn care.' },
+            { title: 'Winter Energy Savings', description: 'Upgrade insulation and use programmable thermostats to reduce heating costs.' },
+            { title: 'Urban Farming', description: 'Support local food systems and reduce carbon footprint with community gardens.' },
+            { title: 'Lake-Effect Weather Prep', description: 'Use energy-efficient heating and proper weatherization for harsh winters.' }
+        ],
         // Add more states as needed
         'default': [
             { title: 'Energy Conservation', description: 'Use LED bulbs and energy-efficient appliances to reduce your carbon footprint.' },
@@ -891,6 +903,7 @@ function getBaseAQIForCity(cityInfo) {
         'Los Angeles, CA': 85,
         'Denver, CO': 52,
         'Chicago, IL': 65,
+        'Detroit, MI': 59,
         'New York, NY': 70,
         'Boston, MA': 58,
         'Miami, FL': 62,
@@ -909,6 +922,7 @@ function getBaseTempForCity(cityInfo) {
         'Phoenix, AZ': [65, 70, 75, 84, 93, 103, 106, 104, 100, 89, 76, 66],
         'Miami, FL': [76, 78, 80, 83, 87, 89, 90, 90, 88, 85, 81, 77],
         'Chicago, IL': [29, 34, 45, 58, 69, 79, 84, 82, 74, 62, 47, 33],
+        'Detroit, MI': [31, 35, 46, 59, 70, 79, 83, 81, 73, 61, 48, 35],
         'New York, NY': [39, 42, 50, 61, 71, 79, 84, 83, 76, 65, 54, 44]
     };
     
@@ -952,6 +966,368 @@ function loadFallbackData(cityInfo) {
     console.log(`✅ Fallback data loaded for ${cityInfo.name}`);
 }
 
+// Weather Prediction Functions
+function updateWeatherPrediction(weatherData) {
+    if (!weatherData) return;
+    
+    updateCurrentWeatherDisplay(weatherData);
+    updateForecastDisplay(weatherData);
+    updatePrecipitationChart(weatherData);
+    updateWeatherAlerts(weatherData);
+    updateRegionalWeatherPatterns(weatherData);
+}
+
+// Update current weather display
+function updateCurrentWeatherDisplay(weatherData) {
+    if (!weatherData.current) return;
+    
+    const current = weatherData.current;
+    const cityInfo = USA_CITIES[currentLocation];
+    
+    // Update weather icon based on weather code
+    const weatherIcon = getWeatherIcon(current.weatherCode);
+    const weatherCondition = getWeatherCondition(current.weatherCode);
+    
+    document.getElementById('weatherIcon').textContent = weatherIcon;
+    document.getElementById('currentTemp').textContent = current.temperature;
+    document.getElementById('weatherCondition').textContent = weatherCondition;
+    
+    // Generate additional weather metrics
+    const feelsLike = current.temperature + Math.floor(Math.random() * 6) - 3;
+    const windSpeed = Math.floor(Math.random() * 15) + 3;
+    const uvIndex = Math.floor(Math.random() * 8) + 1;
+    const precipChance = Math.floor(Math.random() * 60) + 10;
+    const windDirection = getRandomWindDirection();
+    const visibility = Math.floor(Math.random() * 5) + 8;
+    const pressure = (Math.random() * 2 + 29).toFixed(1);
+    
+    document.getElementById('feelsLike').textContent = feelsLike;
+    document.getElementById('windSpeed').textContent = windSpeed;
+    document.getElementById('uvIndex').textContent = uvIndex;
+    document.getElementById('precipitationChance').textContent = precipChance;
+    document.getElementById('windDirection').textContent = windDirection;
+    document.getElementById('visibility').textContent = visibility;
+    document.getElementById('pressure').textContent = pressure;
+}
+
+// Update 7-day forecast display
+function updateForecastDisplay(weatherData) {
+    if (!weatherData.daily) return;
+    
+    const forecastGrid = document.getElementById('forecastGrid');
+    forecastGrid.innerHTML = '';
+    
+    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    
+    weatherData.daily.time.forEach((date, index) => {
+        let dayName;
+        if (index === 0) {
+            dayName = 'Today';
+        } else {
+            // Create date object and get the correct day
+            const dateObj = new Date(date + 'T00:00:00'); // Add time to avoid timezone issues
+            dayName = daysOfWeek[dateObj.getDay()];
+        }
+        
+        const high = Math.round(weatherData.daily.temperatureMax[index]);
+        const low = Math.round(weatherData.daily.temperatureMin[index]);
+        const precipitation = weatherData.daily.precipitation[index] || 0;
+        const rainChance = precipitation > 0 ? Math.floor(precipitation * 20) + 10 : Math.floor(Math.random() * 30);
+        
+        const weatherCode = Math.floor(Math.random() * 3) + 1; // Random weather for demo
+        const icon = getWeatherIcon(weatherCode);
+        
+        const forecastItem = document.createElement('div');
+        forecastItem.className = 'forecast-item';
+        forecastItem.innerHTML = `
+            <div class="forecast-day">${dayName}</div>
+            <div class="forecast-icon">${icon}</div>
+            <div class="forecast-temps">
+                <span class="forecast-high">${high}°</span>
+                <span class="forecast-low">${low}°</span>
+            </div>
+            <div class="forecast-rain">💧 ${rainChance}%</div>
+        `;
+        
+        forecastGrid.appendChild(forecastItem);
+    });
+}
+
+// Update precipitation chart
+function updatePrecipitationChart(weatherData) {
+    const ctx = document.getElementById('precipitationChart');
+    if (!ctx) return;
+    
+    if (charts.precipitation) {
+        charts.precipitation.destroy();
+    }
+    
+    // Generate 24-hour precipitation data
+    const hours = [];
+    const precipitationData = [];
+    const currentHour = new Date().getHours();
+    
+    for (let i = 0; i < 24; i++) {
+        const hour = (currentHour + i) % 24;
+        hours.push(`${hour}:00`);
+        
+        // Simulate precipitation pattern with some realistic peaks
+        let precip = 0;
+        if (Math.random() > 0.7) { // 30% chance of rain in any hour
+            precip = Math.random() * 0.8; // Up to 0.8 inches per hour
+        }
+        precipitationData.push(precip);
+    }
+    
+    charts.precipitation = new Chart(ctx.getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: hours,
+            datasets: [{
+                label: 'Precipitation (inches)',
+                data: precipitationData,
+                backgroundColor: 'rgba(116, 185, 255, 0.6)',
+                borderColor: '#74b9ff',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.parsed.y.toFixed(2)}" precipitation`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 1,
+                    grid: { color: 'rgba(0,0,0,0.1)' },
+                    ticks: { 
+                        color: '#666',
+                        callback: function(value) {
+                            return value.toFixed(1) + '"';
+                        }
+                    }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { 
+                        color: '#666',
+                        maxTicksLimit: 8
+                    }
+                }
+            }
+        }
+    });
+    
+    // Update precipitation summary
+    const totalPrecip = precipitationData.reduce((sum, val) => sum + val, 0);
+    const peakHourIndex = precipitationData.indexOf(Math.max(...precipitationData));
+    const peakHour = hours[peakHourIndex];
+    
+    document.getElementById('totalPrecipitation').textContent = `${totalPrecip.toFixed(2)}"`;
+    document.getElementById('peakPrecipitation').textContent = `Peak at ${peakHour}`;
+}
+
+// Update weather alerts
+function updateWeatherAlerts(weatherData) {
+    const alertsContainer = document.getElementById('weatherAlerts');
+    alertsContainer.innerHTML = '';
+    
+    const cityInfo = USA_CITIES[currentLocation];
+    const alerts = generateWeatherAlerts(cityInfo, weatherData);
+    
+    alerts.forEach(alert => {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'weather-alert';
+        alertDiv.innerHTML = `
+            <div class="alert-icon">${alert.icon}</div>
+            <div class="alert-content">
+                <div class="alert-title">${alert.title}</div>
+                <div class="alert-description">${alert.description}</div>
+                <div class="alert-time">${alert.time}</div>
+            </div>
+        `;
+        alertsContainer.appendChild(alertDiv);
+    });
+}
+
+// Update regional weather patterns
+function updateRegionalWeatherPatterns(weatherData) {
+    const cityInfo = USA_CITIES[currentLocation];
+    
+    // Generate regional weather insights
+    const patterns = generateRegionalPatterns(cityInfo, weatherData);
+    
+    document.getElementById('tempTrend').textContent = patterns.tempTrend.value;
+    document.querySelector('.temperature-trend .regional-description').textContent = patterns.tempTrend.description;
+    
+    document.getElementById('rainfallOutlook').textContent = patterns.rainfall.value;
+    document.querySelector('.rainfall-outlook .regional-description').textContent = patterns.rainfall.description;
+    
+    document.getElementById('seasonalForecast').textContent = patterns.seasonal.value;
+    document.querySelector('.seasonal-forecast .regional-description').textContent = patterns.seasonal.description;
+    
+    document.getElementById('stormActivity').textContent = patterns.storms.value;
+    document.querySelector('.storm-activity .regional-description').textContent = patterns.storms.description;
+}
+
+// Helper functions for weather prediction
+function getWeatherIcon(weatherCode) {
+    const icons = {
+        0: '☀️',  // Clear sky
+        1: '🌤️',  // Mainly clear
+        2: '⛅',  // Partly cloudy
+        3: '☁️',  // Overcast
+        45: '🌫️', // Fog
+        48: '🌫️', // Depositing rime fog
+        51: '🌦️', // Light drizzle
+        53: '🌦️', // Moderate drizzle
+        55: '🌦️', // Dense drizzle
+        61: '🌧️', // Slight rain
+        63: '🌧️', // Moderate rain
+        65: '🌧️', // Heavy rain
+        80: '🌦️', // Slight rain showers
+        81: '🌦️', // Moderate rain showers
+        82: '🌧️', // Violent rain showers
+        95: '⛈️', // Thunderstorm
+        96: '⛈️', // Thunderstorm with slight hail
+        99: '⛈️'  // Thunderstorm with heavy hail
+    };
+    return icons[weatherCode] || '🌤️';
+}
+
+function getWeatherCondition(weatherCode) {
+    const conditions = {
+        0: 'Clear Sky',
+        1: 'Partly Cloudy',
+        2: 'Partly Cloudy',
+        3: 'Overcast',
+        45: 'Foggy',
+        48: 'Foggy',
+        51: 'Light Drizzle',
+        53: 'Drizzle',
+        55: 'Heavy Drizzle',
+        61: 'Light Rain',
+        63: 'Rain',
+        65: 'Heavy Rain',
+        80: 'Rain Showers',
+        81: 'Rain Showers',
+        82: 'Heavy Showers',
+        95: 'Thunderstorm',
+        96: 'Thunderstorm',
+        99: 'Severe Thunderstorm'
+    };
+    return conditions[weatherCode] || 'Partly Cloudy';
+}
+
+function getRandomWindDirection() {
+    const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+    return directions[Math.floor(Math.random() * directions.length)];
+}
+
+function generateWeatherAlerts(cityInfo, weatherData) {
+    const alerts = [];
+    
+    // Generate seasonal/regional appropriate alerts
+    const month = new Date().getMonth();
+    const temp = weatherData.current?.temperature || getBaseTempForCity(cityInfo);
+    
+    // Heat warnings for hot climates in summer
+    if ((cityInfo.state === 'Arizona' || cityInfo.state === 'Texas' || cityInfo.state === 'Florida') 
+        && month >= 5 && month <= 8 && temp > 95) {
+        alerts.push({
+            icon: '🔥',
+            title: 'Excessive Heat Warning',
+            description: 'Dangerous heat conditions expected. Limit outdoor activities and stay hydrated.',
+            time: 'Active until 8:00 PM today'
+        });
+    }
+    
+    // Winter storm alerts for northern states
+    if ((cityInfo.state === 'Washington' || cityInfo.state === 'Colorado' || cityInfo.state === 'Massachusetts')
+        && month >= 11 || month <= 2) {
+        alerts.push({
+            icon: '❄️',
+            title: 'Winter Weather Advisory',
+            description: 'Snow and ice possible overnight. Use caution when traveling.',
+            time: 'Effective 6:00 PM - 6:00 AM tomorrow'
+        });
+    }
+    
+    // Air quality alerts for cities with pollution issues
+    if (cityInfo.name === 'Los Angeles, CA' || cityInfo.name === 'Phoenix, AZ') {
+        alerts.push({
+            icon: '😷',
+            title: 'Air Quality Alert',
+            description: 'Moderate air quality due to particle pollution. Sensitive groups should limit outdoor activities.',
+            time: 'Active through tomorrow'
+        });
+    }
+    
+    return alerts;
+}
+
+function generateRegionalPatterns(cityInfo, weatherData) {
+    const month = new Date().getMonth();
+    const season = month >= 2 && month <= 4 ? 'spring' : 
+                   month >= 5 && month <= 7 ? 'summer' :
+                   month >= 8 && month <= 10 ? 'fall' : 'winter';
+    
+    const patterns = {
+        tempTrend: { value: 'Rising', description: 'Next 3 days: +5°F warmer than average' },
+        rainfall: { value: 'Above Normal', description: '35% above seasonal average expected' },
+        seasonal: { value: 'La Niña Pattern', description: 'Cooler, wetter conditions likely' },
+        storms: { value: 'Moderate', description: '2-3 storm systems forecast this week' }
+    };
+    
+    // Customize based on location and season
+    switch (cityInfo.state) {
+        case 'Washington':
+        case 'Oregon':
+            patterns.rainfall.value = 'Well Above Normal';
+            patterns.rainfall.description = 'Pacific storms bringing abundant moisture';
+            patterns.seasonal.value = 'Pacific Pattern';
+            patterns.seasonal.description = 'Wet season with frequent rain systems';
+            break;
+            
+        case 'California':
+            if (season === 'summer') {
+                patterns.rainfall.value = 'Below Normal';
+                patterns.rainfall.description = 'Dry season continues with minimal rainfall';
+                patterns.seasonal.value = 'High Pressure';
+                patterns.seasonal.description = 'Stable, warm conditions dominating';
+            }
+            break;
+            
+        case 'Arizona':
+        case 'Texas':
+            if (season === 'summer') {
+                patterns.tempTrend.value = 'Extreme Heat';
+                patterns.tempTrend.description = 'Heat dome bringing dangerous temperatures';
+                patterns.storms.value = 'Monsoon Activity';
+                patterns.storms.description = 'Afternoon thunderstorms possible';
+            }
+            break;
+            
+        case 'Florida':
+            patterns.storms.value = 'High Activity';
+            patterns.storms.description = 'Tropical activity monitoring required';
+            patterns.rainfall.value = 'Above Normal';
+            patterns.rainfall.description = 'Frequent afternoon thunderstorms';
+            break;
+    }
+    
+    return patterns;
+}
+
 // Auto-refresh data every 5 minutes
 setInterval(() => {
     if (document.visibilityState === 'visible') {
@@ -965,4 +1341,5 @@ setTimeout(() => {
     console.log(`📍 Monitoring environmental data across America`);
     console.log('👨‍💻 Created by Aniket B. (aniket_b@hotmail.com)');
     console.log('🔄 Real-time data from OpenAQ, Open-Meteo, and USGS APIs');
+    console.log('🌦️ Weather prediction system active');
 }, 1000);

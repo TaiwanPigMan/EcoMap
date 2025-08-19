@@ -41,6 +41,7 @@
                         <option value="los-angeles,ca">Los Angeles, CA</option>
                         <option value="denver,co">Denver, CO</option>
                         <option value="chicago,il">Chicago, IL</option>
+                        <option value="detroit,mi">Detroit, MI</option>
                         <option value="new-york,ny">New York, NY</option>
                         <option value="boston,ma">Boston, MA</option>
                         <option value="miami,fl">Miami, FL</option>
@@ -117,6 +118,123 @@
                         <span class="unit">%</span>
                     </div>
                     <div class="metric-description">King County diversion</div>
+                </div>
+            </section>
+
+            <!-- Weather Prediction Section -->
+            <section class="weather-section">
+                <h3>Weather Prediction & Forecast</h3>
+                
+                <!-- Current Weather Card -->
+                <div class="weather-current">
+                    <div class="weather-current-main">
+                        <div class="weather-icon">
+                            <span id="weatherIcon">🌤️</span>
+                        </div>
+                        <div class="weather-details">
+                            <div class="current-temp">
+                                <span id="currentTemp">68</span>°F
+                            </div>
+                            <div class="weather-condition" id="weatherCondition">Partly Cloudy</div>
+                            <div class="weather-meta">
+                                <span>Feels like <span id="feelsLike">71</span>°F</span>
+                                <span>Wind: <span id="windSpeed">8</span> mph</span>
+                                <span>UV Index: <span id="uvIndex">4</span></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Weather Stats -->
+                    <div class="weather-stats">
+                        <div class="weather-stat">
+                            <div class="stat-icon">🌧️</div>
+                            <div class="stat-value">
+                                <span id="precipitationChance">20</span>%
+                            </div>
+                            <div class="stat-label">Rain Chance</div>
+                        </div>
+                        <div class="weather-stat">
+                            <div class="stat-icon">💨</div>
+                            <div class="stat-value">
+                                <span id="windDirection">NW</span>
+                            </div>
+                            <div class="stat-label">Wind Dir</div>
+                        </div>
+                        <div class="weather-stat">
+                            <div class="stat-icon">👁️</div>
+                            <div class="stat-value">
+                                <span id="visibility">10</span> mi
+                            </div>
+                            <div class="stat-label">Visibility</div>
+                        </div>
+                        <div class="weather-stat">
+                            <div class="stat-icon">🌪️</div>
+                            <div class="stat-value">
+                                <span id="pressure">30.1</span>
+                            </div>
+                            <div class="stat-label">Pressure</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7-Day Forecast -->
+                <div class="forecast-container">
+                    <h4>7-Day Forecast</h4>
+                    <div class="forecast-grid" id="forecastGrid">
+                        <!-- Forecast items will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Hourly Precipitation Chart -->
+                <div class="precipitation-section">
+                    <h4>24-Hour Precipitation Forecast</h4>
+                    <div class="precipitation-chart">
+                        <canvas id="precipitationChart"></canvas>
+                    </div>
+                    <div class="precipitation-summary">
+                        <div class="precip-total">
+                            <span>Total Expected: <strong id="totalPrecipitation">0.2"</strong></span>
+                        </div>
+                        <div class="precip-peak">
+                            <span>Peak Intensity: <strong id="peakPrecipitation">3 PM - 5 PM</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Weather Alerts -->
+                <div class="weather-alerts" id="weatherAlerts">
+                    <!-- Weather alerts will be populated by JavaScript -->
+                </div>
+
+                <!-- Regional Weather Patterns -->
+                <div class="regional-weather">
+                    <h4>Regional Weather Patterns</h4>
+                    <div class="regional-grid">
+                        <div class="regional-card temperature-trend">
+                            <div class="regional-icon">🌡️</div>
+                            <div class="regional-title">Temperature Trend</div>
+                            <div class="regional-value" id="tempTrend">Rising</div>
+                            <div class="regional-description">Next 3 days: +5°F warmer than average</div>
+                        </div>
+                        <div class="regional-card rainfall-outlook">
+                            <div class="regional-icon">☔</div>
+                            <div class="regional-title">Rainfall Outlook</div>
+                            <div class="regional-value" id="rainfallOutlook">Above Normal</div>
+                            <div class="regional-description">35% above seasonal average expected</div>
+                        </div>
+                        <div class="regional-card seasonal-forecast">
+                            <div class="regional-icon">🗓️</div>
+                            <div class="regional-title">Seasonal Forecast</div>
+                            <div class="regional-value" id="seasonalForecast">La Niña Pattern</div>
+                            <div class="regional-description">Cooler, wetter conditions likely</div>
+                        </div>
+                        <div class="regional-card storm-activity">
+                            <div class="regional-icon">⛈️</div>
+                            <div class="regional-title">Storm Activity</div>
+                            <div class="regional-value" id="stormActivity">Moderate</div>
+                            <div class="regional-description">2-3 storm systems forecast this week</div>
+                        </div>
+                    </div>
                 </div>
             </section>
 

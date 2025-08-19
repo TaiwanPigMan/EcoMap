@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize the dashboard
     initializeDashboard();
     setupLocationSelector();
+    setupTabNavigation();
     loadCurrentLocationData();
 });
 
@@ -1326,6 +1327,45 @@ function generateRegionalPatterns(cityInfo, weatherData) {
     }
     
     return patterns;
+}
+
+// Setup tab navigation functionality
+function setupTabNavigation() {
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetTab = button.getAttribute('data-tab');
+            
+            // Remove active class from all buttons and contents
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Add active class to clicked button
+            button.classList.add('active');
+            
+            // Show corresponding content
+            const targetContent = document.getElementById(`${targetTab}-content`);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+            
+            // Initialize map if switching to ecomap tab
+            if (targetTab === 'ecomap') {
+                setTimeout(() => {
+                    initializeUSAMap();
+                }, 300);
+            }
+            
+            console.log(`🔄 Switched to ${targetTab} tab`);
+        });
+    });
+    
+    // Initialize the USA map on page load for the default tab
+    setTimeout(() => {
+        initializeUSAMap();
+    }, 1000);
 }
 
 // Auto-refresh data every 5 minutes

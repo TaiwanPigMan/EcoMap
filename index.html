@@ -121,8 +121,80 @@
                 </div>
             </section>
 
-            <!-- Weather Prediction Section -->
-            <section class="weather-section">
+            <!-- Navigation Tabs -->
+            <section class="tab-navigation">
+                <div class="tab-buttons">
+                    <button class="tab-button active" data-tab="ecomap">🌍 Environmental Dashboard</button>
+                    <button class="tab-button" data-tab="weather">🌦️ Weather Predictions</button>
+                </div>
+            </section>
+
+            <!-- EcoMap Content Tab -->
+            <div class="tab-content active" id="ecomap-content">
+                <!-- Charts Section -->
+                <section class="charts-section">
+                    <div class="chart-container">
+                        <h3>24-Hour Air Quality Trend</h3>
+                        <canvas id="aqiChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Weekly Temperature Range</h3>
+                        <canvas id="tempChart"></canvas>
+                    </div>
+                </section>
+
+                <!-- Map Section -->
+                <section class="map-section">
+                    <h3>Environmental Monitoring Stations</h3>
+                    <div id="map"></div>
+                    <div class="map-legend">
+                        <div class="legend-item">
+                            <span class="legend-color good"></span>
+                            <span>Good Air Quality</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color moderate"></span>
+                            <span>Moderate Air Quality</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color poor"></span>
+                            <span>Poor Air Quality</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Environmental Tips -->
+                <section class="tips-section">
+                    <h3>Environmental Tips for Bellevue Residents</h3>
+                    <div class="tips-grid">
+                        <div class="tip-card">
+                            <div class="tip-icon">🚴</div>
+                            <h4>Use Alternative Transport</h4>
+                            <p>Bike or use public transit to reduce emissions. Bellevue has excellent bike trails!</p>
+                        </div>
+                        <div class="tip-card">
+                            <div class="tip-icon">♻️</div>
+                            <h4>Recycle Properly</h4>
+                            <p>Follow Bellevue's recycling guidelines to minimize waste in our community.</p>
+                        </div>
+                        <div class="tip-card">
+                            <div class="tip-icon">🌳</div>
+                            <h4>Plant Native Species</h4>
+                            <p>Support local ecosystems by planting Pacific Northwest native plants.</p>
+                        </div>
+                        <div class="tip-card">
+                            <div class="tip-icon">💡</div>
+                            <h4>Energy Conservation</h4>
+                            <p>Use LED bulbs and energy-efficient appliances to reduce your carbon footprint.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Weather Predictions Content Tab -->
+            <div class="tab-content" id="weather-content">
+                <!-- Weather Prediction Section -->
+                <section class="weather-section">
                 <h3>Weather Prediction & Forecast</h3>
                 
                 <!-- Current Weather Card -->
@@ -237,65 +309,7 @@
                     </div>
                 </div>
             </section>
-
-            <!-- Charts Section -->
-            <section class="charts-section">
-                <div class="chart-container">
-                    <h3>24-Hour Air Quality Trend</h3>
-                    <canvas id="aqiChart"></canvas>
-                </div>
-                <div class="chart-container">
-                    <h3>Weekly Temperature Range</h3>
-                    <canvas id="tempChart"></canvas>
-                </div>
-            </section>
-
-            <!-- Map Section -->
-            <section class="map-section">
-                <h3>Environmental Monitoring Stations</h3>
-                <div id="map"></div>
-                <div class="map-legend">
-                    <div class="legend-item">
-                        <span class="legend-color good"></span>
-                        <span>Good Air Quality</span>
-                    </div>
-                    <div class="legend-item">
-                        <span class="legend-color moderate"></span>
-                        <span>Moderate Air Quality</span>
-                    </div>
-                    <div class="legend-item">
-                        <span class="legend-color poor"></span>
-                        <span>Poor Air Quality</span>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Environmental Tips -->
-            <section class="tips-section">
-                <h3>Environmental Tips for Bellevue Residents</h3>
-                <div class="tips-grid">
-                    <div class="tip-card">
-                        <div class="tip-icon">🚴</div>
-                        <h4>Use Alternative Transport</h4>
-                        <p>Bike or use public transit to reduce emissions. Bellevue has excellent bike trails!</p>
-                    </div>
-                    <div class="tip-card">
-                        <div class="tip-icon">♻️</div>
-                        <h4>Recycle Properly</h4>
-                        <p>Follow Bellevue's recycling guidelines to minimize waste in our community.</p>
-                    </div>
-                    <div class="tip-card">
-                        <div class="tip-icon">🌳</div>
-                        <h4>Plant Native Species</h4>
-                        <p>Support local ecosystems by planting Pacific Northwest native plants.</p>
-                    </div>
-                    <div class="tip-card">
-                        <div class="tip-icon">💡</div>
-                        <h4>Energy Conservation</h4>
-                        <p>Use LED bulbs and energy-efficient appliances to reduce your carbon footprint.</p>
-                    </div>
-                </div>
-            </section>
+            </div>
             <section class="hero">
                 <h2>About This Project</h2>
                 <p>This expanded project demonstrates my growing interest in environmental engineering at a national scale. By integrating real-time APIs from across America, I've created a comprehensive tool that visualizes environmental data patterns from coast to coast. This USA-wide dashboard showcases advanced coding skills, API integration, and data visualization while providing practical environmental monitoring for any major US city. It represents the evolution from local environmental awareness to understanding national environmental challenges and solutions.</p>

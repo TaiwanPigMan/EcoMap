@@ -156,10 +156,12 @@ This is a student project for educational purposes. Feedback and suggestions are
 ## 📧 Contact
 
 **Environmental Science Program**  
+Aniket Bhattacharjee
 Bellevue High School 
 Student Research Project
 
 ---
 
 *Created with 🌱 by environmental science students committed to sustainability and community awareness.*
+
 

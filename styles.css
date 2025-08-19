@@ -847,6 +847,26 @@ footer {
         padding: 2rem 0;
     }
 
+    /* Weather Section Mobile Improvements */
+    .weather-section {
+        padding: 2rem 0;
+    }
+
+    .weather-section h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .weather-section h4 {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+
+    .weather-current {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
     .weather-current-main {
         flex-direction: column;
         text-align: center;
@@ -854,40 +874,175 @@ footer {
     }
 
     .weather-icon {
-        width: 100px;
-        height: 100px;
-        font-size: 3rem;
+        width: 80px;
+        height: 80px;
+        font-size: 2.5rem;
+        margin: 0 auto;
     }
 
     .current-temp {
-        font-size: 3rem;
+        font-size: 2.5rem;
+    }
+
+    .weather-condition {
+        font-size: 1.2rem;
     }
 
     .weather-meta {
         justify-content: center;
-        gap: 1rem;
+        gap: 0.8rem;
+        font-size: 0.8rem;
+    }
+
+    .weather-meta span {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.2rem;
     }
 
     .weather-stats {
         grid-template-columns: repeat(2, 1fr);
-    }
-
-    .forecast-grid {
-        grid-template-columns: repeat(3, 1fr);
         gap: 0.8rem;
     }
 
+    .weather-stat {
+        padding: 1rem;
+    }
+
+    .stat-icon {
+        font-size: 1.5rem;
+    }
+
+    .stat-value {
+        font-size: 1.2rem;
+    }
+
+    .stat-label {
+        font-size: 0.7rem;
+    }
+
+    /* Forecast Mobile Improvements */
+    .forecast-container {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .forecast-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
+        max-height: none;
+        overflow: visible;
+    }
+
     .forecast-item {
-        padding: 1rem 0.5rem;
+        padding: 1rem 0.8rem;
+        min-height: 120px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .forecast-day {
+        font-size: 0.8rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .forecast-icon {
+        font-size: 1.5rem;
+        margin: 0.3rem 0;
+    }
+
+    .forecast-temps {
+        font-size: 0.8rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .forecast-rain {
+        font-size: 0.7rem;
+    }
+
+    /* Precipitation Chart Mobile */
+    .precipitation-section {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .precipitation-chart {
+        height: 200px;
+        margin-bottom: 1rem;
     }
 
     .precipitation-summary {
         flex-direction: column;
         text-align: center;
+        gap: 0.8rem;
+        padding: 1rem;
+    }
+
+    .precip-total, .precip-peak {
+        font-size: 0.8rem;
+        justify-content: center;
+    }
+
+    /* Weather Alerts Mobile */
+    .weather-alerts {
+        margin-bottom: 1.5rem;
+    }
+
+    .weather-alert {
+        padding: 1rem;
+        flex-direction: column;
+        text-align: center;
+        gap: 0.8rem;
+    }
+
+    .alert-icon {
+        font-size: 1.5rem;
+    }
+
+    .alert-title {
+        font-size: 1rem;
+    }
+
+    .alert-description {
+        font-size: 0.8rem;
+    }
+
+    .alert-time {
+        font-size: 0.7rem;
+    }
+
+    /* Regional Weather Mobile */
+    .regional-weather {
+        padding: 1.5rem;
     }
 
     .regional-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .regional-card {
+        padding: 1rem;
+    }
+
+    .regional-icon {
+        font-size: 2rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .regional-title {
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .regional-value {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .regional-description {
+        font-size: 0.8rem;
     }
 
     .charts-section {

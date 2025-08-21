@@ -2,14 +2,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>EcoMap Challenges - Sustainability Gaming Hub</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="challenge-styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Mobile-friendly loading of external libraries -->
+    <script>
+        // Detect mobile and load Chart.js conditionally
+        function loadScript(src, callback) {
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = callback || function() {};
+            script.onerror = function() {
+                console.warn('Failed to load script:', src);
+            };
+            document.head.appendChild(script);
+        }
+        
+        function loadCSS(href) {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = href;
+            link.onerror = function() {
+                console.warn('Failed to load CSS:', href);
+            };
+            document.head.appendChild(link);
+        }
+        
+        // Load external resources after DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            loadScript('https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js');
+            // Only load Leaflet if needed (we're not using maps on this page)
+            // loadCSS('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
+            // loadScript('https://unpkg.com/leaflet@1.9.4/dist/leaflet.js');
+        });
+    </script>
 </head>
 <body>
     <header>

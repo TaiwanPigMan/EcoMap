@@ -292,73 +292,109 @@ class EcoGameSystem {
     }
     
     renderImpactCharts() {
-        // Render CO2 impact chart
-        const co2Chart = document.getElementById('co2Chart');
-        if (co2Chart && !co2Chart.chartInstance) {
-            const ctx = co2Chart.getContext('2d');
-            co2Chart.chartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                    datasets: [{
-                        label: 'CO₂ Saved (lbs)',
-                        data: [2.1, 3.5, 2.8, 4.2, 3.1, 5.6, 4.8],
-                        borderColor: '#22c55e',
-                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                        fill: true,
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            }
-                        }
-                    }
-                }
-            });
+        // Check if Chart.js is available before trying to use it
+        if (typeof Chart === 'undefined') {
+            console.log('Chart.js not loaded yet, charts will be available after library loads');
+            return;
         }
         
-        // Render actions breakdown chart
-        const actionsChart = document.getElementById('actionsChart');
-        if (actionsChart && !actionsChart.chartInstance) {
-            const ctx = actionsChart.getContext('2d');
-            actionsChart.chartInstance = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Transportation', 'Energy', 'Water', 'Recycling', 'Other'],
-                    datasets: [{
-                        data: [35, 25, 20, 15, 5],
-                        backgroundColor: [
-                            '#3b82f6',
-                            '#f59e0b',
-                            '#06b6d4',
-                            '#22c55e',
-                            '#8b5cf6'
-                        ]
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
+        try {
+            // Render CO2 impact chart
+            const co2Chart = document.getElementById('co2Chart');
+            if (co2Chart && !co2Chart.chartInstance) {
+                const ctx = co2Chart.getContext('2d');
+                co2Chart.chartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        datasets: [{
+                            label: 'CO₂ Saved (lbs)',
+                            data: [2.1, 3.5, 2.8, 4.2, 3.1, 5.6, 4.8],
+                            borderColor: '#22c55e',
+                            backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                }
+                            }
                         }
                     }
+                });
+            }
+            
+            // Render actions breakdown chart
+            const actionsChart = document.getElementById('actionsChart');
+            if (actionsChart && !actionsChart.chartInstance) {
+                const ctx = actionsChart.getContext('2d');
+                actionsChart.chartInstance = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Transportation', 'Energy', 'Water', 'Recycling', 'Other'],
+                        datasets: [{
+                            data: [35, 25, 20, 15, 5],
+                            backgroundColor: [
+                                '#3b82f6',
+                                '#f59e0b',
+                                '#06b6d4',
+                                '#22c55e',
+                                '#8b5cf6'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            }
+        } catch (error) {
+            console.log('Error rendering charts:', error);
+            // Fallback for when charts can't be rendered
+            const chartContainers = document.querySelectorAll('.chart-container');
+            chartContainers.forEach(container => {
+                const canvas = container.querySelector('canvas');
+                if (canvas && !canvas.dataset.fallback) {
+                    canvas.dataset.fallback = 'true';
+                    canvas.style.display = 'none';
+                    const fallback = document.createElement('div');
+                    fallback.className = 'chart-fallback';
+                    fallback.innerHTML = `
+                        <div style="
+                            background: linear-gradient(135deg, #f8f9ff, #e3f2fd);
+                            padding: 2rem;
+                            border-radius: 15px;
+                            text-align: center;
+                            color: #666;
+                        ">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">📊</div>
+                            <div>Chart data available in desktop view</div>
+                        </div>
+                    `;
+                    container.appendChild(fallback);
                 }
             });
         }
@@ -368,8 +404,12 @@ class EcoGameSystem {
         // Quick action buttons
         document.querySelectorAll('.quick-action-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const action = e.target.dataset.action;
-                this.logQuickAction(action);
+                // Handle clicks on nested elements within the button
+                const button = e.target.closest('.quick-action-btn');
+                const action = button ? button.dataset.action : null;
+                if (action) {
+                    this.logQuickAction(action);
+                }
             });
         });
         

@@ -1214,36 +1214,123 @@
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
+/* Mobile Touch Improvements */
+@media (hover: none) and (pointer: coarse) {
+    /* Touch-specific styles for mobile devices */
+    .quick-action-btn,
+    .challenge-btn,
+    .action-btn,
+    .tab-button,
+    .filter-btn,
+    .modal-btn,
+    .team-join-btn {
+        min-height: 44px; /* iOS accessibility guideline */
+        touch-action: manipulation; /* Disable double-tap zoom */
+    }
+    
+    .quick-action-btn {
+        padding: 1.2rem;
+    }
+    
+    .challenge-btn {
+        padding: 1.2rem;
+        font-size: 1.1rem;
+    }
+    
+    .tab-button {
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+    }
+    
+    /* Remove hover effects on touch devices */
+    .quick-action-btn:hover,
+    .challenge-btn:hover,
+    .action-btn:hover,
+    .tab-button:hover,
+    .filter-btn:hover {
+        transform: none;
+        box-shadow: none;
+    }
+    
+    /* Add active/pressed states for better touch feedback */
+    .quick-action-btn:active,
+    .challenge-btn:active,
+    .action-btn:active {
+        transform: scale(0.98);
+        transition: transform 0.1s ease;
+    }
+}
+
 /* Responsive Design for Challenges */
 @media (max-width: 768px) {
+    .user-profile {
+        padding: 1.5rem 0;
+    }
+    
     .profile-card {
         flex-direction: column;
         text-align: center;
         gap: 1.5rem;
+        padding: 1.5rem;
+    }
+    
+    .avatar-circle {
+        width: 100px;
+        height: 100px;
+        font-size: 2.5rem;
+    }
+    
+    .profile-info h2 {
+        font-size: 2rem;
     }
 
     .profile-stats {
         grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
     }
+    
+    .stat-value {
+        font-size: 1.5rem;
+    }
 
     .action-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
+    }
+    
+    .quick-action-btn {
+        padding: 1rem;
+    }
+    
+    .action-icon {
+        font-size: 2rem;
     }
 
     .challenges-grid,
     .weekly-challenges {
         grid-template-columns: 1fr;
     }
+    
+    .challenge-card {
+        padding: 1.5rem;
+    }
+    
+    .challenge-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+    }
 
     .podium {
         flex-direction: column;
         align-items: center;
+        gap: 1rem;
     }
 
     .podium-place {
         order: unset !important;
         transform: none !important;
+        margin-bottom: 0;
     }
 
     .achievements-grid {
@@ -1257,8 +1344,17 @@
     .impact-charts {
         grid-template-columns: 1fr;
     }
+    
+    .chart-container {
+        min-height: 250px;
+    }
 
     .community-stats {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .achievement-stats {
         flex-direction: column;
         gap: 1.5rem;
     }
@@ -1270,11 +1366,37 @@
     .leaderboard-filters {
         flex-wrap: wrap;
         gap: 0.3rem;
+        max-width: 100%;
     }
 
     .filter-btn {
-        padding: 0.6rem 1rem;
+        padding: 0.8rem 1.2rem;
         font-size: 0.9rem;
+        flex: 1;
+        min-width: calc(50% - 0.15rem);
+    }
+    
+    .tab-buttons {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    
+    .tab-buttons::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .tab-button {
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding: 0.8rem 1.2rem;
+        font-size: 0.9rem;
+    }
+    
+    .metrics-actions .metrics-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
 }
 

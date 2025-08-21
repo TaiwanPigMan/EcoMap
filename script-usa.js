@@ -17,14 +17,34 @@ const USA_CITIES = {
     'portland,or': { name: 'Portland, OR', lat: 45.5152, lon: -122.6784, state: 'Oregon' },
     'san-francisco,ca': { name: 'San Francisco, CA', lat: 37.7749, lon: -122.4194, state: 'California' },
     'los-angeles,ca': { name: 'Los Angeles, CA', lat: 34.0522, lon: -118.2437, state: 'California' },
+    'san-diego,ca': { name: 'San Diego, CA', lat: 32.7157, lon: -117.1611, state: 'California' },
+    'sacramento,ca': { name: 'Sacramento, CA', lat: 38.5816, lon: -121.4944, state: 'California' },
     'denver,co': { name: 'Denver, CO', lat: 39.7392, lon: -104.9903, state: 'Colorado' },
+    'colorado-springs,co': { name: 'Colorado Springs, CO', lat: 38.8339, lon: -104.8214, state: 'Colorado' },
     'chicago,il': { name: 'Chicago, IL', lat: 41.8781, lon: -87.6298, state: 'Illinois' },
     'detroit,mi': { name: 'Detroit, MI', lat: 42.3314, lon: -83.0458, state: 'Michigan' },
+    'milwaukee,wi': { name: 'Milwaukee, WI', lat: 43.0389, lon: -87.9065, state: 'Wisconsin' },
+    'minneapolis,mn': { name: 'Minneapolis, MN', lat: 44.9778, lon: -93.2650, state: 'Minnesota' },
     'new-york,ny': { name: 'New York, NY', lat: 40.7128, lon: -74.0060, state: 'New York' },
+    'albany,ny': { name: 'Albany, NY', lat: 42.6526, lon: -73.7562, state: 'New York' },
+    'philadelphia,pa': { name: 'Philadelphia, PA', lat: 39.9526, lon: -75.1652, state: 'Pennsylvania' },
+    'pittsburgh,pa': { name: 'Pittsburgh, PA', lat: 40.4406, lon: -79.9959, state: 'Pennsylvania' },
     'boston,ma': { name: 'Boston, MA', lat: 42.3601, lon: -71.0589, state: 'Massachusetts' },
+    'atlanta,ga': { name: 'Atlanta, GA', lat: 33.7490, lon: -84.3880, state: 'Georgia' },
+    'charlotte,nc': { name: 'Charlotte, NC', lat: 35.2271, lon: -80.8431, state: 'North Carolina' },
+    'richmond,va': { name: 'Richmond, VA', lat: 37.5407, lon: -77.4360, state: 'Virginia' },
     'miami,fl': { name: 'Miami, FL', lat: 25.7617, lon: -80.1918, state: 'Florida' },
+    'orlando,fl': { name: 'Orlando, FL', lat: 28.5383, lon: -81.3792, state: 'Florida' },
+    'tampa,fl': { name: 'Tampa, FL', lat: 27.9506, lon: -82.4572, state: 'Florida' },
+    'jacksonville,fl': { name: 'Jacksonville, FL', lat: 30.3322, lon: -81.6557, state: 'Florida' },
     'austin,tx': { name: 'Austin, TX', lat: 30.2672, lon: -97.7431, state: 'Texas' },
-    'phoenix,az': { name: 'Phoenix, AZ', lat: 33.4484, lon: -112.0740, state: 'Arizona' }
+    'houston,tx': { name: 'Houston, TX', lat: 29.7604, lon: -95.3698, state: 'Texas' },
+    'dallas,tx': { name: 'Dallas, TX', lat: 32.7767, lon: -96.7970, state: 'Texas' },
+    'san-antonio,tx': { name: 'San Antonio, TX', lat: 29.4241, lon: -98.4936, state: 'Texas' },
+    'phoenix,az': { name: 'Phoenix, AZ', lat: 33.4484, lon: -112.0740, state: 'Arizona' },
+    'tucson,az': { name: 'Tucson, AZ', lat: 32.2226, lon: -110.9747, state: 'Arizona' },
+    'las-vegas,nv': { name: 'Las Vegas, NV', lat: 36.1699, lon: -115.1398, state: 'Nevada' },
+    'salt-lake-city,ut': { name: 'Salt Lake City, UT', lat: 40.7608, lon: -111.8910, state: 'Utah' }
 };
 
 // Current application state
@@ -289,11 +309,19 @@ function generateRegionalWaterFlow(cityInfo) {
         'Colorado': 45.3,
         'Illinois': 18.7,
         'Michigan': 32.1,
+        'Wisconsin': 28.7,
+        'Minnesota': 35.2,
         'New York': 22.4,
+        'Pennsylvania': 24.8,
         'Massachusetts': 19.6,
+        'Georgia': 16.4,
+        'North Carolina': 19.8,
+        'Virginia': 21.2,
         'Florida': 12.3,
         'Texas': 8.9,
-        'Arizona': 3.2
+        'Arizona': 3.2,
+        'Nevada': 2.1,
+        'Utah': 12.8
     };
     
     const baseFlow = baseFlows[cityInfo.state] || 15.0;
@@ -313,11 +341,19 @@ function generateStateRecyclingRate(cityInfo) {
         'Colorado': 65,
         'Illinois': 58,
         'Michigan': 64,
+        'Wisconsin': 66,
+        'Minnesota': 69,
         'New York': 62,
+        'Pennsylvania': 59,
         'Massachusetts': 71,
+        'Georgia': 56,
+        'North Carolina': 61,
+        'Virginia': 63,
         'Florida': 54,
         'Texas': 49,
-        'Arizona': 52
+        'Arizona': 52,
+        'Nevada': 48,
+        'Utah': 67
     };
     
     return stateRates[cityInfo.state] || 60;

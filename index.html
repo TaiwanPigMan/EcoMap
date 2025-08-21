@@ -146,6 +146,7 @@
                 <div class="tab-buttons">
                     <button class="tab-button active" data-tab="ecomap">🌍 Environmental Dashboard</button>
                     <button class="tab-button" data-tab="weather">🌦️ Weather Predictions</button>
+                    <button class="tab-button" data-tab="challenges">🎮 Sustainability Challenges</button>
                 </div>
             </section>
 
@@ -211,6 +212,135 @@
                 </section>
             </div>
 
+            <!-- Sustainability Challenges Content Tab -->
+            <div class="tab-content" id="challenges-content">
+                <section class="challenges-section">
+                    <div class="section-header">
+                        <h3>🎮 Sustainability Challenges Hub</h3>
+                        <p>Take action on environmental issues with gamified challenges. Earn points, unlock achievements, and make a real impact!</p>
+                    </div>
+                    
+                    <!-- Quick Actions Dashboard -->
+                    <div class="quick-actions-embedded">
+                        <h4>🚀 Quick Environmental Actions</h4>
+                        <div class="action-grid">
+                            <button class="quick-action-btn" data-action="bike" onclick="logQuickAction('bike')">
+                                <div class="action-icon">🚴</div>
+                                <div class="action-text">Biked Today</div>
+                                <div class="action-points">+25 pts</div>
+                            </button>
+                            <button class="quick-action-btn" data-action="recycle" onclick="logQuickAction('recycle')">
+                                <div class="action-icon">♻️</div>
+                                <div class="action-text">Recycled</div>
+                                <div class="action-points">+15 pts</div>
+                            </button>
+                            <button class="quick-action-btn" data-action="energy" onclick="logQuickAction('energy')">
+                                <div class="action-icon">💡</div>
+                                <div class="action-text">Saved Energy</div>
+                                <div class="action-points">+20 pts</div>
+                            </button>
+                            <button class="quick-action-btn" data-action="water" onclick="logQuickAction('water')">
+                                <div class="action-icon">💧</div>
+                                <div class="action-text">Saved Water</div>
+                                <div class="action-points">+10 pts</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- User Progress Summary -->
+                    <div class="user-progress-summary">
+                        <h4>📊 Your Environmental Impact</h4>
+                        <div class="progress-grid">
+                            <div class="progress-card">
+                                <div class="progress-icon">🌱</div>
+                                <div class="progress-value" id="totalPointsDisplay">0</div>
+                                <div class="progress-label">EcoPoints</div>
+                            </div>
+                            <div class="progress-card">
+                                <div class="progress-icon">🏆</div>
+                                <div class="progress-value" id="challengesCompletedDisplay">0</div>
+                                <div class="progress-label">Challenges</div>
+                            </div>
+                            <div class="progress-card">
+                                <div class="progress-icon">🌍</div>
+                                <div class="progress-value" id="co2SavedDisplay">0</div>
+                                <div class="progress-label">CO₂ Saved (lbs)</div>
+                            </div>
+                            <div class="progress-card">
+                                <div class="progress-icon">📅</div>
+                                <div class="progress-value" id="currentStreakDisplay">0</div>
+                                <div class="progress-label">Day Streak</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Today's Challenges Preview -->
+                    <div class="todays-challenges">
+                        <h4>🎯 Today's Featured Challenges</h4>
+                        <div class="challenges-preview-grid">
+                            <div class="challenge-preview-card">
+                                <div class="challenge-icon">🚲</div>
+                                <div class="challenge-info">
+                                    <h5>Green Commute Champion</h5>
+                                    <p>Use sustainable transportation today</p>
+                                    <div class="challenge-reward">+25 pts, -2.5 lbs CO₂</div>
+                                </div>
+                                <button class="challenge-start-btn" onclick="startEmbeddedChallenge('transport')">Start</button>
+                            </div>
+                            <div class="challenge-preview-card">
+                                <div class="challenge-icon">💡</div>
+                                <div class="challenge-info">
+                                    <h5>Energy Saver Hero</h5>
+                                    <p>Reduce energy consumption by 15%</p>
+                                    <div class="challenge-reward">+35 pts, -1.8 lbs CO₂</div>
+                                </div>
+                                <button class="challenge-start-btn" onclick="startEmbeddedChallenge('energy')">Start</button>
+                            </div>
+                            <div class="challenge-preview-card">
+                                <div class="challenge-icon">♻️</div>
+                                <div class="challenge-info">
+                                    <h5>Waste Reduction Warrior</h5>
+                                    <p>Minimize single-use items today</p>
+                                    <div class="challenge-reward">+30 pts, -2.0 lbs CO₂</div>
+                                </div>
+                                <button class="challenge-start-btn" onclick="startEmbeddedChallenge('waste')">Start</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Environmental Action Tips -->
+                    <div class="action-tips-section">
+                        <h4>💡 Smart Environmental Actions Based on Current Data</h4>
+                        <div class="tips-grid" id="dynamicTips">
+                            <div class="tip-card">
+                                <div class="tip-icon">🌬️</div>
+                                <h5>Air Quality Action</h5>
+                                <p>Current AQI is <span id="currentAQI">42</span>. Consider biking or walking instead of driving to help maintain good air quality.</p>
+                            </div>
+                            <div class="tip-card">
+                                <div class="tip-icon">🌡️</div>
+                                <h5>Temperature-Based Tip</h5>
+                                <p>With current temperature at <span id="currentTemp">68</span>°F, it's perfect weather for outdoor activities that reduce energy consumption.</p>
+                            </div>
+                            <div class="tip-card">
+                                <div class="tip-icon">♻️</div>
+                                <h5>Recycling Challenge</h5>
+                                <p>Local recycling rate is <span id="currentRecycling">68</span>%. Help improve this by proper sorting and community education!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Link to Full Challenges Platform -->
+                    <div class="full-platform-link">
+                        <h4>🎮 Want More Challenges?</h4>
+                        <p>Access the complete gamified experience with leaderboards, achievements, and community features!</p>
+                        <button class="platform-link-btn" onclick="window.location.href='eco-challenges.html'">
+                            🚀 Launch Full Challenges Platform
+                        </button>
+                    </div>
+                </section>
+            </div>
+
             <!-- Weather Predictions Content Tab -->
             <div class="tab-content" id="weather-content">
                 <!-- Weather Prediction Section -->
@@ -239,7 +369,7 @@
                     <!-- Weather Stats -->
                     <div class="weather-stats">
                         <div class="weather-stat">
-                            <div class="stat-icon">🌧️</div>
+                            <div class="stat-icon">�️</div>
                             <div class="stat-value">
                                 <span id="precipitationChance">20</span>%
                             </div>
@@ -369,5 +499,304 @@
     </footer>
 
     <script src="script-usa.js"></script>
+    <script src="shared-data.js"></script>
+    <script>
+        // Initialize data bridge when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof EcoMapDataBridge !== 'undefined') {
+                window.dataBridge = new EcoMapDataBridge();
+                
+                // Update environmental data when dashboard data changes
+                function updateBridgeData() {
+                    const envData = {
+                        airQuality: parseFloat(document.getElementById('aqiValue').textContent) || Math.random() * 100,
+                        temperature: parseFloat(document.getElementById('tempValue').textContent) || 20 + Math.random() * 15,
+                        humidity: parseFloat(document.getElementById('humidityValue').textContent) || 40 + Math.random() * 30,
+                        streamflow: parseFloat(document.getElementById('streamflowValue').textContent) || Math.random() * 50,
+                        recyclingRate: parseFloat(document.getElementById('recyclingValue').textContent) || 60 + Math.random() * 20
+                    };
+                    
+                    window.dataBridge.updateEnvironmentalData(envData);
+                    
+                    // Generate location-based challenges
+                    const challenges = window.dataBridge.generateLocationChallenges();
+                    console.log('Generated challenges based on environmental data:', challenges);
+                }
+                
+                // Update data when location changes
+                const updateBtn = document.getElementById('updateLocation');
+                if (updateBtn) {
+                    updateBtn.addEventListener('click', function() {
+                        setTimeout(updateBridgeData, 1000); // Allow time for data to update
+                    });
+                }
+                
+                // Initial data update
+                updateBridgeData();
+                
+                // Update data periodically
+                setInterval(updateBridgeData, 30000); // Every 30 seconds
+                
+                // Update embedded challenges display
+                function updateEmbeddedChallenges() {
+                    if (window.dataBridge) {
+                        const userData = window.dataBridge.getUserData();
+                        
+                        // Update progress display
+                        const totalPointsEl = document.getElementById('totalPointsDisplay');
+                        const challengesCompletedEl = document.getElementById('challengesCompletedDisplay');
+                        const co2SavedEl = document.getElementById('co2SavedDisplay');
+                        const currentStreakEl = document.getElementById('currentStreakDisplay');
+                        
+                        if (totalPointsEl) totalPointsEl.textContent = userData.points || 0;
+                        if (challengesCompletedEl) challengesCompletedEl.textContent = userData.challengesCompleted || 0;
+                        if (co2SavedEl) co2SavedEl.textContent = (userData.co2Saved || 0).toFixed(1);
+                        if (currentStreakEl) currentStreakEl.textContent = userData.currentStreak || 0;
+                        
+                        // Update dynamic tips with current environmental data
+                        const envData = window.dataBridge.getEnvironmentalData();
+                        if (envData) {
+                            const currentAQIEl = document.getElementById('currentAQI');
+                            const currentTempEl = document.getElementById('currentTemp');
+                            const currentRecyclingEl = document.getElementById('currentRecycling');
+                            
+                            if (currentAQIEl) currentAQIEl.textContent = Math.round(envData.airQuality);
+                            if (currentTempEl) currentTempEl.textContent = Math.round(envData.temperature);
+                            if (currentRecyclingEl) currentRecyclingEl.textContent = Math.round(envData.recyclingRate);
+                        }
+                    }
+                }
+                
+                // Update challenges display when tab is switched
+                const challengesTab = document.querySelector('[data-tab="challenges"]');
+                if (challengesTab) {
+                    challengesTab.addEventListener('click', updateEmbeddedChallenges);
+                }
+                
+                // Initial update
+                updateEmbeddedChallenges();
+                setInterval(updateEmbeddedChallenges, 10000); // Update every 10 seconds
+            }
+        });
+        
+        // Quick Action Functions for Embedded Challenges
+        function logQuickAction(action) {
+            if (window.dataBridge) {
+                const pointsMap = {
+                    bike: 25,
+                    recycle: 15,
+                    energy: 20,
+                    water: 10
+                };
+                
+                const co2Map = {
+                    bike: 2.5,
+                    recycle: 0.8,
+                    energy: 1.2,
+                    water: 0.5
+                };
+                
+                const userData = window.dataBridge.getUserData();
+                userData.points = (userData.points || 0) + pointsMap[action];
+                userData.co2Saved = (userData.co2Saved || 0) + co2Map[action];
+                
+                window.dataBridge.updateUserData(userData);
+                
+                // Show notification
+                showEmbeddedNotification(`+${pointsMap[action]} points! ${action.charAt(0).toUpperCase() + action.slice(1)} action logged.`);
+                
+                // Update display
+                updateEmbeddedChallenges();
+            }
+        }
+        
+        function startEmbeddedChallenge(challengeType) {
+            showEmbeddedNotification(`🎯 ${challengeType.charAt(0).toUpperCase() + challengeType.slice(1)} challenge started! Track your progress in the full platform.`);
+            
+            // Optional: redirect to full platform with specific challenge
+            setTimeout(() => {
+                window.location.href = `eco-challenges.html#${challengeType}`;
+            }, 2000);
+        }
+        
+        function showEmbeddedNotification(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = 'embedded-notification';
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #4CAF50;
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 1000;
+                font-weight: 500;
+                animation: slideInRight 0.3s ease-out;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease-in';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+        
+        // Add CSS animations for notifications
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+            
+            .quick-actions-embedded .action-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1rem;
+                margin-top: 1rem;
+            }
+            
+            .quick-action-btn {
+                background: linear-gradient(135deg, #4CAF50, #45a049);
+                border: none;
+                border-radius: 12px;
+                padding: 1rem;
+                color: white;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                text-align: center;
+            }
+            
+            .quick-action-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+            }
+            
+            .progress-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 1rem;
+                margin-top: 1rem;
+            }
+            
+            .progress-card {
+                background: white;
+                border-radius: 12px;
+                padding: 1.5rem;
+                text-align: center;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                border: 2px solid #f0f0f0;
+            }
+            
+            .progress-icon {
+                font-size: 2rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .progress-value {
+                font-size: 1.5rem;
+                font-weight: bold;
+                color: #2c3e50;
+                margin-bottom: 0.25rem;
+            }
+            
+            .progress-label {
+                color: #666;
+                font-size: 0.9rem;
+            }
+            
+            .challenges-preview-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 1.5rem;
+                margin-top: 1rem;
+            }
+            
+            .challenge-preview-card {
+                background: white;
+                border-radius: 12px;
+                padding: 1.5rem;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                border-left: 4px solid #4CAF50;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+            }
+            
+            .challenge-icon {
+                font-size: 2rem;
+                flex-shrink: 0;
+            }
+            
+            .challenge-info {
+                flex-grow: 1;
+            }
+            
+            .challenge-info h5 {
+                margin: 0 0 0.5rem 0;
+                color: #2c3e50;
+            }
+            
+            .challenge-info p {
+                margin: 0 0 0.5rem 0;
+                color: #666;
+                font-size: 0.9rem;
+            }
+            
+            .challenge-reward {
+                font-size: 0.8rem;
+                color: #4CAF50;
+                font-weight: bold;
+            }
+            
+            .challenge-start-btn {
+                background: #4CAF50;
+                color: white;
+                border: none;
+                padding: 0.5rem 1rem;
+                border-radius: 6px;
+                cursor: pointer;
+                font-weight: 500;
+                transition: background 0.3s ease;
+            }
+            
+            .challenge-start-btn:hover {
+                background: #45a049;
+            }
+            
+            .platform-link-btn {
+                background: linear-gradient(135deg, #FF6B6B, #ee5a52);
+                color: white;
+                border: none;
+                padding: 1rem 2rem;
+                border-radius: 12px;
+                font-size: 1.1rem;
+                font-weight: bold;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                margin-top: 1rem;
+            }
+            
+            .platform-link-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(255, 107, 107, 0.3);
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
 </body>
 </html>

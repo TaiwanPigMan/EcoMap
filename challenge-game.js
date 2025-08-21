@@ -519,28 +519,112 @@ class EcoGameSystem {
         const modalIcon = document.getElementById('modalIcon');
         const modalTitle = document.getElementById('modalTitle');
         const modalDescription = document.getElementById('modalDescription');
+        const modalDifficulty = document.getElementById('modalDifficulty');
+        const modalProgressText = document.getElementById('modalProgressText');
+        const modalProgressBar = document.getElementById('modalProgressBar');
+        const modalPoints = document.getElementById('modalPoints');
+        const modalCO2 = document.getElementById('modalCO2');
+        const modalTipsList = document.getElementById('modalTipsList');
         const modalPrimaryBtn = document.getElementById('modalPrimaryBtn');
         
         if (modal && modalIcon && modalTitle && modalDescription && modalPrimaryBtn) {
             // Set modal content based on challenge
-            const challengeIcons = {
-                'transport': '🚲',
-                'energy': '💡',
-                'waste': '🗑️',
-                'school-green': '🏫',
-                'community-impact': '🌍'
+            const challengeData = {
+                'transport': {
+                    icon: '🚲',
+                    difficulty: 'Easy',
+                    points: '+25 Points',
+                    co2: '-2.5 lbs CO₂',
+                    tips: [
+                        'Plan your route in advance',
+                        'Check weather conditions',
+                        'Use bike-sharing services if available',
+                        'Wear appropriate safety gear'
+                    ]
+                },
+                'energy': {
+                    icon: '💡',
+                    difficulty: 'Medium',
+                    points: '+35 Points',
+                    co2: '-1.8 lbs CO₂',
+                    tips: [
+                        'Turn off lights when leaving rooms',
+                        'Unplug electronics when not in use',
+                        'Use natural light when possible',
+                        'Switch to LED bulbs'
+                    ]
+                },
+                'waste': {
+                    icon: '🗑️',
+                    difficulty: 'Hard',
+                    points: '+50 Points',
+                    co2: '-3.2 lbs CO₂',
+                    tips: [
+                        'Bring reusable bags and containers',
+                        'Choose products with minimal packaging',
+                        'Refuse single-use items',
+                        'Compost organic waste'
+                    ]
+                },
+                'school-green': {
+                    icon: '🏫',
+                    difficulty: 'Medium',
+                    points: '+200 Points',
+                    co2: '-10 lbs CO₂',
+                    tips: [
+                        'Start with small initiatives',
+                        'Get teacher and admin support',
+                        'Recruit passionate students',
+                        'Document your impact'
+                    ]
+                },
+                'community-impact': {
+                    icon: '🌍',
+                    difficulty: 'Hard',
+                    points: '+300 Points',
+                    co2: '-15 lbs CO₂',
+                    tips: [
+                        'Connect with local environmental groups',
+                        'Plan events that engage neighbors',
+                        'Use social media to promote initiatives',
+                        'Partner with local businesses'
+                    ]
+                }
             };
             
-            modalIcon.textContent = challengeIcons[challenge.id] || '🌱';
+            const data = challengeData[challenge.id] || challengeData['transport'];
+            
+            modalIcon.textContent = data.icon;
             modalTitle.textContent = challenge.name;
             modalDescription.textContent = challenge.description;
+            if (modalDifficulty) modalDifficulty.textContent = data.difficulty;
+            if (modalPoints) modalPoints.textContent = data.points;
+            if (modalCO2) modalCO2.textContent = data.co2;
+            
+            // Update progress
+            if (modalProgressText && modalProgressBar) {
+                modalProgressText.textContent = `${challenge.progress} / ${challenge.target}`;
+                const progressPercent = (challenge.progress / challenge.target) * 100;
+                modalProgressBar.style.width = `${progressPercent}%`;
+            }
+            
+            // Update tips
+            if (modalTipsList) {
+                modalTipsList.innerHTML = '';
+                data.tips.forEach(tip => {
+                    const li = document.createElement('li');
+                    li.textContent = tip;
+                    modalTipsList.appendChild(li);
+                });
+            }
+            
             modalPrimaryBtn.textContent = challenge.completed ? 'Completed ✓' : 'Start Challenge';
             
             // Update click handler for primary button
             modalPrimaryBtn.onclick = () => {
                 if (!challenge.completed) {
                     this.completeChallenge(challenge.id);
-                    closeModal();
+                    this.closeModal();
                 }
             };
             
@@ -682,6 +766,110 @@ class EcoGameSystem {
             }
         });
     }
+    closeModal() {
+        const modal = document.getElementById('challengeModal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+    
+    showAchievementModal(achievement) {
+        const modal = document.getElementById('achievementModal');
+        const achievementIcon = document.getElementById('achievementIcon');
+        const achievementTitle = document.getElementById('achievementTitle');
+        const achievementDesc = document.getElementById('achievementDesc');
+        const achievementPoints = document.getElementById('achievementPoints');
+        
+        if (modal && achievementIcon && achievementTitle && achievementDesc) {
+            achievementIcon.textContent = achievement.icon;
+            achievementTitle.textContent = achievement.name;
+            achievementDesc.textContent = achievement.description;
+            if (achievementPoints) achievementPoints.textContent = '+50 Bonus Points!';
+            
+            modal.style.display = 'block';
+            
+            // Auto-close after 4 seconds
+            setTimeout(() => {
+                this.closeAchievementModal();
+            }, 4000);
+        }
+    }
+    
+    closeAchievementModal() {
+        const modal = document.getElementById('achievementModal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+    
+    showTeamModal(teamData) {
+        const modal = document.getElementById('teamModal');
+        const teamName = document.getElementById('teamName');
+        const teamDescription = document.getElementById('teamDescription');
+        const teamMembers = document.getElementById('teamMembers');
+        const teamCO2 = document.getElementById('teamCO2');
+        const teamRank = document.getElementById('teamRank');
+        const joinTeamBtn = document.getElementById('joinTeamBtn');
+        
+        if (modal && teamName && teamDescription) {
+            teamName.textContent = teamData.name || 'Bellevue High Green Team';
+            teamDescription.textContent = teamData.description || 'Working together to make our school carbon neutral by 2025!';
+            if (teamMembers) teamMembers.textContent = teamData.members || '24';
+            if (teamCO2) teamCO2.textContent = teamData.co2Saved || '234';
+            if (teamRank) teamRank.textContent = teamData.rank || '3rd';
+            
+            if (joinTeamBtn) {
+                joinTeamBtn.onclick = () => {
+                    this.joinTeam(teamData);
+                    this.closeTeamModal();
+                };
+            }
+            
+            modal.style.display = 'block';
+        }
+    }
+    
+    closeTeamModal() {
+        const modal = document.getElementById('teamModal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+    
+    joinTeam(teamData) {
+        this.addPoints(50); // Bonus points for joining a team
+        this.showNotification(`Welcome to ${teamData.name || 'the team'}! +50 bonus points!`, 'success');
+        
+        // Update team player achievement progress
+        const teamPlayerAchievement = this.achievements.find(a => a.id === 'team-player');
+        if (teamPlayerAchievement && !teamPlayerAchievement.earned) {
+            // In a real app, this would track team memberships
+            teamPlayerAchievement.earned = true;
+            this.showAchievementModal(teamPlayerAchievement);
+        }
+    }
+    
+    setupCommunityFeatures() {
+        // Team join button event listeners
+        document.querySelectorAll('.team-join-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const teamCard = e.target.closest('.team-card');
+                const teamName = teamCard.querySelector('.team-header h5').textContent;
+                const teamDescription = teamCard.querySelector('p').textContent;
+                const teamMembers = teamCard.querySelector('.team-members').textContent;
+                
+                const teamData = {
+                    name: teamName,
+                    description: teamDescription,
+                    members: teamMembers.replace(' members', ''),
+                    co2Saved: '234',
+                    rank: '3rd'
+                };
+                
+                this.showTeamModal(teamData);
+            });
+        });
+    }
 }
 
 // Initialize the game system when the page loads
@@ -703,9 +891,20 @@ function viewChallenge(challengeId) {
 }
 
 function closeModal() {
-    const modal = document.getElementById('challengeModal');
-    if (modal) {
-        modal.style.display = 'none';
+    if (window.ecoGame) {
+        window.ecoGame.closeModal();
+    }
+}
+
+function closeAchievementModal() {
+    if (window.ecoGame) {
+        window.ecoGame.closeAchievementModal();
+    }
+}
+
+function closeTeamModal() {
+    if (window.ecoGame) {
+        window.ecoGame.closeTeamModal();
     }
 }
 

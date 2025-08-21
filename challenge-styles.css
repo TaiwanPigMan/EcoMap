@@ -1759,3 +1759,361 @@
         font-size: 2.2rem;
     }
 }
+
+/* Enhanced Modal Styles */
+.modal-difficulty {
+    background: linear-gradient(135deg, #74b9ff, #0984e3);
+    color: white;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-top: 0.5rem;
+    display: inline-block;
+}
+
+.modal-progress {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 15px;
+    margin-bottom: 1.5rem;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+}
+
+.progress-label {
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.progress-numbers {
+    font-weight: 700;
+    color: #74b9ff;
+}
+
+.modal-rewards {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.reward-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #f8f9ff, #e3f2fd);
+    padding: 0.8rem 1.2rem;
+    border-radius: 15px;
+    border: 2px solid #e9ecef;
+}
+
+.reward-icon {
+    font-size: 1.2rem;
+}
+
+.reward-text {
+    font-weight: 600;
+    color: #2d3748;
+    font-size: 0.9rem;
+}
+
+.modal-tips {
+    background: linear-gradient(135deg, #fff9e6, #fff3cd);
+    padding: 1.5rem;
+    border-radius: 15px;
+    border-left: 5px solid #fdcb6e;
+    margin-bottom: 1.5rem;
+}
+
+.modal-tips h4 {
+    color: #2d3748;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.modal-tips ul {
+    margin: 0;
+    padding-left: 1.2rem;
+}
+
+.modal-tips li {
+    color: #666;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+/* Achievement Modal */
+.achievement-popup {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-align: center;
+    padding: 3rem 2rem;
+    max-width: 400px;
+    position: relative;
+    overflow: hidden;
+}
+
+.achievement-animation {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.achievement-icon-large {
+    font-size: 6rem;
+    margin-bottom: 1rem;
+    animation: achievementBounce 0.8s ease-out;
+}
+
+@keyframes achievementBounce {
+    0% { transform: scale(0) rotate(0deg); }
+    50% { transform: scale(1.2) rotate(180deg); }
+    100% { transform: scale(1) rotate(360deg); }
+}
+
+.achievement-sparkles {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+    animation: sparkle 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes sparkle {
+    0% { opacity: 0.5; transform: translateX(-50%) scale(0.8); }
+    100% { opacity: 1; transform: translateX(-50%) scale(1.2); }
+}
+
+.achievement-text h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #fff, #f1f2f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.achievement-text h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #fdcb6e;
+}
+
+.achievement-text p {
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+.achievement-points {
+    background: linear-gradient(135deg, #fdcb6e, #e17055);
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    display: inline-block;
+    margin-bottom: 2rem;
+    animation: pointsGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes pointsGlow {
+    from { box-shadow: 0 0 15px rgba(253, 203, 110, 0.5); }
+    to { box-shadow: 0 0 25px rgba(253, 203, 110, 0.8); }
+}
+
+/* Team Modal */
+.team-info {
+    margin-bottom: 2rem;
+}
+
+.team-info h4 {
+    color: #2d3748;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.team-info p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.team-stats {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 15px;
+    margin-bottom: 1.5rem;
+}
+
+.team-stat {
+    text-align: center;
+}
+
+.team-stat .stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #74b9ff;
+    display: block;
+}
+
+.team-stat .stat-label {
+    color: #666;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.team-benefits {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    padding: 1.5rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+}
+
+.team-benefits h4 {
+    color: #2d3748;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.team-benefits ul {
+    margin: 0;
+    padding-left: 1.2rem;
+}
+
+.team-benefits li {
+    color: #666;
+    margin-bottom: 0.8rem;
+    line-height: 1.4;
+}
+
+/* Enhanced Action Buttons */
+.quick-action-btn {
+    background: linear-gradient(135deg, #74b9ff, #0984e3);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    font-family: inherit;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.quick-action-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(116, 185, 255, 0.4);
+}
+
+.quick-action-btn:active {
+    transform: translateY(-1px);
+}
+
+.quick-action-btn.completed {
+    background: linear-gradient(135deg, #00b894, #00a085);
+    animation: actionComplete 0.6s ease-out;
+}
+
+.quick-action-btn.completed::after {
+    content: "✓";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+}
+
+/* Mobile Modal Enhancements */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+    
+    .modal-rewards {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    
+    .reward-item {
+        justify-content: center;
+    }
+    
+    .team-stats {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .achievement-popup {
+        padding: 2rem 1.5rem;
+    }
+    
+    .achievement-icon-large {
+        font-size: 4rem;
+    }
+    
+    .achievement-text h2 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-actions {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    
+    .modal-btn {
+        width: 100%;
+        padding: 1rem;
+    }
+    
+    .modal-tips {
+        padding: 1rem;
+    }
+    
+    .team-benefits {
+        padding: 1rem;
+    }
+}
+
+/* Enhanced Modal Display States */
+.modal[data-visible="true"] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal[data-type="achievement"] .modal-content {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.modal[data-type="team"] .modal-content {
+    background: linear-gradient(135deg, #f8f9ff, #ffffff);
+}

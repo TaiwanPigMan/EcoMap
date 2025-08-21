@@ -211,6 +211,7 @@
             <!-- Navigation Tabs -->
             <section class="tab-navigation">
                 <div class="tab-buttons">
+                    <button class="tab-button dashboard-link" onclick="window.location.href='index.html'">📊 Environmental Dashboard</button>
                     <button class="tab-button active" data-tab="challenges">🎯 Daily Challenges</button>
                     <button class="tab-button" data-tab="leaderboard">🏆 Leaderboard</button>
                     <button class="tab-button" data-tab="achievements">🏅 Achievements</button>
@@ -666,12 +667,101 @@
                     <div class="modal-header">
                         <div class="modal-icon" id="modalIcon">🚲</div>
                         <h3 id="modalTitle">Green Commute Champion</h3>
+                        <div class="modal-difficulty" id="modalDifficulty">Easy</div>
                     </div>
                     <div class="modal-body">
                         <p id="modalDescription">Track your sustainable transportation choices today!</p>
+                        <div class="modal-progress" id="modalProgress">
+                            <div class="progress-info">
+                                <span class="progress-label">Progress:</span>
+                                <span class="progress-numbers" id="modalProgressText">0 / 1</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="modalProgressBar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="modal-rewards">
+                            <div class="reward-item">
+                                <span class="reward-icon">⭐</span>
+                                <span class="reward-text" id="modalPoints">+25 Points</span>
+                            </div>
+                            <div class="reward-item">
+                                <span class="reward-icon">🌱</span>
+                                <span class="reward-text" id="modalCO2">-2.5 lbs CO₂</span>
+                            </div>
+                        </div>
+                        <div class="modal-tips" id="modalTips">
+                            <h4>💡 Tips for Success:</h4>
+                            <ul id="modalTipsList">
+                                <li>Plan your route in advance</li>
+                                <li>Check weather conditions</li>
+                                <li>Use bike-sharing services if available</li>
+                            </ul>
+                        </div>
                         <div class="modal-actions">
-                            <button class="modal-btn primary" id="modalPrimaryBtn">Log Transport</button>
+                            <button class="modal-btn primary" id="modalPrimaryBtn">Start Challenge</button>
                             <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Achievement Notification Modal -->
+            <div class="modal" id="achievementModal">
+                <div class="modal-content achievement-popup">
+                    <div class="achievement-animation">
+                        <div class="achievement-icon-large" id="achievementIcon">🏆</div>
+                        <div class="achievement-sparkles">✨</div>
+                    </div>
+                    <div class="achievement-text">
+                        <h2>Achievement Unlocked!</h2>
+                        <h3 id="achievementTitle">First Steps</h3>
+                        <p id="achievementDesc">Complete your first challenge</p>
+                        <div class="achievement-points" id="achievementPoints">+50 Bonus Points!</div>
+                    </div>
+                    <button class="modal-btn primary" onclick="closeAchievementModal()">Awesome!</button>
+                </div>
+            </div>
+
+            <!-- Team Join Modal -->
+            <div class="modal" id="teamModal">
+                <div class="modal-content">
+                    <span class="modal-close" onclick="closeTeamModal()">&times;</span>
+                    <div class="modal-header">
+                        <div class="modal-icon">👥</div>
+                        <h3 id="teamModalTitle">Join Team</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="team-info" id="teamModalInfo">
+                            <h4 id="teamName">Bellevue High Green Team</h4>
+                            <p id="teamDescription">Working together to make our school carbon neutral by 2025!</p>
+                            <div class="team-stats">
+                                <div class="team-stat">
+                                    <span class="stat-number" id="teamMembers">24</span>
+                                    <span class="stat-label">Members</span>
+                                </div>
+                                <div class="team-stat">
+                                    <span class="stat-number" id="teamCO2">234</span>
+                                    <span class="stat-label">lbs CO₂ Saved</span>
+                                </div>
+                                <div class="team-stat">
+                                    <span class="stat-number" id="teamRank">3rd</span>
+                                    <span class="stat-label">Ranking</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="team-benefits">
+                            <h4>🎯 Team Benefits:</h4>
+                            <ul>
+                                <li>Bonus points for team challenges</li>
+                                <li>Shared progress tracking</li>
+                                <li>Group competitions and events</li>
+                                <li>Access to team-exclusive challenges</li>
+                            </ul>
+                        </div>
+                        <div class="modal-actions">
+                            <button class="modal-btn primary" id="joinTeamBtn">Join Team</button>
+                            <button class="modal-btn secondary" onclick="closeTeamModal()">Maybe Later</button>
                         </div>
                     </div>
                 </div>
@@ -707,6 +797,85 @@
     </footer>
 
     <script src="script-usa.js"></script>
+    <script src="shared-data.js"></script>
     <script src="challenge-game.js"></script>
+    <script>
+        // Initialize data bridge integration when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                if (typeof EcoMapDataBridge !== 'undefined' && window.ecoGame) {
+                    window.dataBridge = new EcoMapDataBridge();
+                    
+                    // Sync challenge data with bridge
+                    function syncWithBridge() {
+                        try {
+                            // Get current user data from game
+                            const userData = window.ecoGame.userData;
+                            
+                            // Update bridge with user progress
+                            window.dataBridge.updateUserData({
+                                level: userData.level,
+                                points: userData.points,
+                                achievements: userData.achievements,
+                                co2Saved: userData.co2Saved
+                            });
+                            
+                            // Get environmental data from bridge
+                            const envData = window.dataBridge.getEnvironmentalData();
+                            
+                            // Update environmental metrics display with real data
+                            if (envData) {
+                                updateEnvironmentalMetrics(envData);
+                            }
+                            
+                            // Generate contextual challenges based on environmental data
+                            const locationChallenges = window.dataBridge.generateLocationChallenges();
+                            if (locationChallenges.length > 0) {
+                                addLocationChallenges(locationChallenges);
+                            }
+                        } catch (error) {
+                            console.log('Bridge sync error:', error);
+                        }
+                    }
+                    
+                    // Update environmental metrics with real data
+                    function updateEnvironmentalMetrics(envData) {
+                        const aqiElement = document.getElementById('aqiValue');
+                        const tempElement = document.getElementById('tempValue');
+                        const waterElement = document.getElementById('waterValue');
+                        const recyclingElement = document.getElementById('recyclingValue');
+                        
+                        if (aqiElement) aqiElement.textContent = Math.round(envData.airQuality);
+                        if (tempElement) tempElement.textContent = Math.round(envData.temperature);
+                        if (waterElement) waterElement.textContent = envData.streamflow.toFixed(1);
+                        if (recyclingElement) recyclingElement.textContent = Math.round(envData.recyclingRate);
+                    }
+                    
+                    // Add location-based challenges to the game
+                    function addLocationChallenges(locationChallenges) {
+                        locationChallenges.forEach(challenge => {
+                            if (!window.ecoGame.challenges.find(c => c.id === challenge.id)) {
+                                window.ecoGame.challenges.push(challenge);
+                            }
+                        });
+                        
+                        // Re-render challenges to include new ones
+                        if (window.ecoGame.renderChallenges) {
+                            window.ecoGame.renderChallenges();
+                        }
+                    }
+                    
+                    // Initial sync
+                    syncWithBridge();
+                    
+                    // Sync periodically
+                    setInterval(syncWithBridge, 60000); // Every minute
+                    
+                    // Sync when user completes actions
+                    document.addEventListener('ecoActionCompleted', syncWithBridge);
+                }
+            }, 2000); // Allow time for game to initialize
+        });
+    </script>
 </body>
 </html>

@@ -79,6 +79,7 @@ class EcoGameSystem {
         this.renderEnvironmentalActions();
         this.setupEventListeners();
         this.setupTabNavigation();
+        this.setupCommunityFeatures();
         this.startRealtimeUpdates();
         this.loadUserData();
     }
@@ -239,15 +240,20 @@ class EcoGameSystem {
     }
     
     renderEnvironmentalActions() {
-        const actionsContainer = document.querySelector('.environmental-actions');
-        if (!actionsContainer) return;
-        
+        // Update the selector to target the metrics cards properly
         Object.keys(this.environmentalActions).forEach(category => {
             const categoryActions = this.environmentalActions[category];
             const categoryElement = document.querySelector(`[data-category="${category}"] .metric-actions`);
             
             if (categoryElement) {
+                // Clear existing content except the header
+                const header = categoryElement.querySelector('h5');
                 categoryElement.innerHTML = '';
+                if (header) {
+                    categoryElement.appendChild(header);
+                }
+                
+                // Add action buttons
                 categoryActions.forEach(action => {
                     const actionButton = document.createElement('button');
                     actionButton.className = 'action-btn';

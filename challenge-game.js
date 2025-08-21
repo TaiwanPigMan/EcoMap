@@ -78,7 +78,36 @@ class EcoGameSystem {
         this.renderLeaderboard();
         this.renderEnvironmentalActions();
         this.setupEventListeners();
+        this.setupTabNavigation();
         this.startRealtimeUpdates();
+        this.loadUserData();
+    }
+    
+    loadUserData() {
+        // Load user data from localStorage if available
+        const savedProfile = localStorage.getItem('ecoMapProfile');
+        if (savedProfile) {
+            this.userProfile = { ...this.userProfile, ...JSON.parse(savedProfile) };
+            this.updateUserProfile();
+        }
+        
+        const savedChallenges = localStorage.getItem('ecoMapChallenges');
+        if (savedChallenges) {
+            this.challenges = { ...this.challenges, ...JSON.parse(savedChallenges) };
+            this.renderChallenges();
+        }
+        
+        const savedAchievements = localStorage.getItem('ecoMapAchievements');
+        if (savedAchievements) {
+            this.achievements = JSON.parse(savedAchievements);
+            this.renderAchievements();
+        }
+    }
+    
+    saveUserData() {
+        localStorage.setItem('ecoMapProfile', JSON.stringify(this.userProfile));
+        localStorage.setItem('ecoMapChallenges', JSON.stringify(this.challenges));
+        localStorage.setItem('ecoMapAchievements', JSON.stringify(this.achievements));
     }
     
     updateUserProfile() {
@@ -209,6 +238,106 @@ class EcoGameSystem {
         });
     }
     
+    setupTabNavigation() {
+        // Tab navigation functionality
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const targetTab = e.target.dataset.tab;
+                this.switchTab(targetTab);
+            });
+        });
+    }
+    
+    switchTab(tabName) {
+        // Remove active class from all tabs and content
+        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        
+        // Add active class to selected tab and content
+        document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+        document.getElementById(`${tabName}-content`).classList.add('active');
+        
+        // Special handling for different tabs
+        if (tabName === 'impact') {
+            this.renderImpactCharts();
+        } else if (tabName === 'achievements') {
+            this.renderAchievements();
+        }
+    }
+    
+    renderImpactCharts() {
+        // Render CO2 impact chart
+        const co2Chart = document.getElementById('co2Chart');
+        if (co2Chart && !co2Chart.chartInstance) {
+            const ctx = co2Chart.getContext('2d');
+            co2Chart.chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'CO₂ Saved (lbs)',
+                        data: [2.1, 3.5, 2.8, 4.2, 3.1, 5.6, 4.8],
+                        borderColor: '#22c55e',
+                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Render actions breakdown chart
+        const actionsChart = document.getElementById('actionsChart');
+        if (actionsChart && !actionsChart.chartInstance) {
+            const ctx = actionsChart.getContext('2d');
+            actionsChart.chartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Transportation', 'Energy', 'Water', 'Recycling', 'Other'],
+                    datasets: [{
+                        data: [35, 25, 20, 15, 5],
+                        backgroundColor: [
+                            '#3b82f6',
+                            '#f59e0b',
+                            '#06b6d4',
+                            '#22c55e',
+                            '#8b5cf6'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+    }
+    
     setupEventListeners() {
         // Quick action buttons
         document.querySelectorAll('.quick-action-btn').forEach(btn => {
@@ -328,6 +457,7 @@ class EcoGameSystem {
         }
         
         this.updateUserProfile();
+        this.saveUserData();
     }
     
     checkAchievements() {

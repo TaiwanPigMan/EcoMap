@@ -111,47 +111,73 @@ class EcoGameSystem {
     }
     
     updateUserProfile() {
-        document.querySelector('.user-name').textContent = this.userProfile.name;
-        document.querySelector('.level-badge').textContent = `Level ${this.userProfile.level}`;
-        document.querySelector('.user-avatar').textContent = this.userProfile.avatar;
-        
-        // Update stats
-        document.querySelector('.stat-item:nth-child(1) .stat-value').textContent = this.userProfile.points.toLocaleString();
-        document.querySelector('.stat-item:nth-child(2) .stat-value').textContent = this.userProfile.challengesCompleted;
-        document.querySelector('.stat-item:nth-child(3) .stat-value').textContent = `${this.userProfile.currentStreak} days`;
-        document.querySelector('.stat-item:nth-child(4) .stat-value').textContent = `${this.userProfile.co2Saved}kg`;
-        
-        // Update XP bar
-        const currentLevelXP = (this.userProfile.level - 1) * 200;
-        const nextLevelXP = this.userProfile.level * 200;
-        const progress = ((this.userProfile.points - currentLevelXP) / (nextLevelXP - currentLevelXP)) * 100;
-        document.querySelector('.xp-fill').style.width = `${Math.min(progress, 100)}%`;
-        document.querySelector('.xp-text').textContent = `${this.userProfile.points}/${nextLevelXP} XP`;
+        // Use more defensive programming with try-catch
+        try {
+            const userNameEl = document.getElementById('userName');
+            const levelBadgeEl = document.getElementById('userLevel');
+            const avatarEl = document.getElementById('userAvatar');
+            
+            if (userNameEl) userNameEl.textContent = this.userProfile.name;
+            if (levelBadgeEl) levelBadgeEl.textContent = `Lvl ${this.userProfile.level}`;
+            if (avatarEl) avatarEl.textContent = this.userProfile.avatar;
+            
+            // Update stats using IDs
+            const totalPointsEl = document.getElementById('totalPoints');
+            const challengesCompletedEl = document.getElementById('challengesCompleted');
+            const currentStreakEl = document.getElementById('currentStreak');
+            const co2SavedEl = document.getElementById('co2Saved');
+            
+            if (totalPointsEl) totalPointsEl.textContent = this.userProfile.points.toLocaleString();
+            if (challengesCompletedEl) challengesCompletedEl.textContent = this.userProfile.challengesCompleted;
+            if (currentStreakEl) currentStreakEl.textContent = this.userProfile.currentStreak;
+            if (co2SavedEl) co2SavedEl.textContent = this.userProfile.co2Saved.toFixed(1);
+            
+            // Update XP bar
+            const xpFillEl = document.getElementById('xpFill');
+            const xpTextEl = document.getElementById('xpText');
+            
+            if (xpFillEl && xpTextEl) {
+                const currentLevelXP = (this.userProfile.level - 1) * 200;
+                const nextLevelXP = this.userProfile.level * 200;
+                const progress = ((this.userProfile.points - currentLevelXP) / (nextLevelXP - currentLevelXP)) * 100;
+                xpFillEl.style.width = `${Math.min(progress, 100)}%`;
+                xpTextEl.textContent = `${this.userProfile.points - currentLevelXP} / ${nextLevelXP - currentLevelXP} XP`;
+            }
+        } catch (error) {
+            console.log('Error updating user profile:', error);
+        }
     }
     
     renderChallenges() {
         // Daily challenges
-        const dailyChallengesContainer = document.querySelector('.daily-challenges .challenges-grid');
-        dailyChallengesContainer.innerHTML = '';
-        
-        this.challenges.daily.forEach(challenge => {
-            const challengeElement = this.createChallengeElement(challenge);
-            dailyChallengesContainer.appendChild(challengeElement);
-        });
+        const dailyChallengesContainer = document.querySelector('.challenges-grid');
+        if (dailyChallengesContainer) {
+            // Clear existing daily challenges only
+            const dailyCards = dailyChallengesContainer.querySelectorAll('.challenge-card.daily');
+            dailyCards.forEach(card => card.remove());
+            
+            this.challenges.daily.forEach(challenge => {
+                const challengeElement = this.createChallengeElement(challenge, 'daily');
+                dailyChallengesContainer.appendChild(challengeElement);
+            });
+        }
         
         // Weekly challenges
-        const weeklyChallengesContainer = document.querySelector('.weekly-challenges .challenges-grid');
-        weeklyChallengesContainer.innerHTML = '';
-        
-        this.challenges.weekly.forEach(challenge => {
-            const challengeElement = this.createChallengeElement(challenge);
-            weeklyChallengesContainer.appendChild(challengeElement);
-        });
+        const weeklyChallengesContainer = document.querySelector('.weekly-challenges');
+        if (weeklyChallengesContainer) {
+            const weeklyCards = weeklyChallengesContainer.querySelectorAll('.challenge-card.weekly');
+            weeklyCards.forEach(card => card.remove());
+            
+            this.challenges.weekly.forEach(challenge => {
+                const challengeElement = this.createChallengeElement(challenge, 'weekly');
+                weeklyChallengesContainer.appendChild(challengeElement);
+            });
+        }
     }
     
-    createChallengeElement(challenge) {
+    createChallengeElement(challenge, type = 'daily') {
         const div = document.createElement('div');
-        div.className = `challenge-card ${challenge.completed ? 'completed' : ''}`;
+        div.className = `challenge-card ${type} ${challenge.completed ? 'completed' : ''}`;
         div.innerHTML = `
             <div class="challenge-header">
                 <h4>${challenge.name}</h4>
@@ -426,6 +452,62 @@ class EcoGameSystem {
         }
     }
     
+    startChallenge(challengeId) {
+        const dailyChallenge = this.challenges.daily.find(c => c.id === challengeId);
+        const weeklyChallenge = this.challenges.weekly.find(c => c.id === challengeId);
+        const challenge = dailyChallenge || weeklyChallenge;
+        
+        if (challenge && !challenge.completed) {
+            // Show modal with challenge details
+            this.showChallengeModal(challenge);
+        } else if (challenge && challenge.completed) {
+            this.showNotification(`Challenge "${challenge.name}" already completed!`, 'info');
+        } else {
+            this.showNotification('Challenge not found!', 'info');
+        }
+    }
+    
+    viewChallenge(challengeId) {
+        const weeklyChallenge = this.challenges.weekly.find(c => c.id === challengeId);
+        if (weeklyChallenge) {
+            this.showChallengeModal(weeklyChallenge);
+        }
+    }
+    
+    showChallengeModal(challenge) {
+        const modal = document.getElementById('challengeModal');
+        const modalIcon = document.getElementById('modalIcon');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDescription = document.getElementById('modalDescription');
+        const modalPrimaryBtn = document.getElementById('modalPrimaryBtn');
+        
+        if (modal && modalIcon && modalTitle && modalDescription && modalPrimaryBtn) {
+            // Set modal content based on challenge
+            const challengeIcons = {
+                'transport': '🚲',
+                'energy': '💡',
+                'waste': '🗑️',
+                'school-green': '🏫',
+                'community-impact': '🌍'
+            };
+            
+            modalIcon.textContent = challengeIcons[challenge.id] || '🌱';
+            modalTitle.textContent = challenge.name;
+            modalDescription.textContent = challenge.description;
+            modalPrimaryBtn.textContent = challenge.completed ? 'Completed ✓' : 'Start Challenge';
+            
+            // Update click handler for primary button
+            modalPrimaryBtn.onclick = () => {
+                if (!challenge.completed) {
+                    this.completeChallenge(challenge.id);
+                    closeModal();
+                }
+            };
+            
+            modal.style.display = 'block';
+        }
+    }
+    
     completeEnvironmentalAction(actionId, category) {
         const action = this.environmentalActions[category]?.find(a => a.id === actionId);
         if (action) {
@@ -566,6 +648,26 @@ class EcoGameSystem {
 document.addEventListener('DOMContentLoaded', () => {
     window.ecoGame = new EcoGameSystem();
 });
+
+// Global functions for HTML onclick handlers
+function startChallenge(challengeId) {
+    if (window.ecoGame) {
+        window.ecoGame.startChallenge(challengeId);
+    }
+}
+
+function viewChallenge(challengeId) {
+    if (window.ecoGame) {
+        window.ecoGame.viewChallenge(challengeId);
+    }
+}
+
+function closeModal() {
+    const modal = document.getElementById('challengeModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
 
 // Export for potential module use
 if (typeof module !== 'undefined' && module.exports) {
